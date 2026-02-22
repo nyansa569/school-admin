@@ -101,7 +101,7 @@ export function Footer({ className }: FooterProps) {
         
         <div className={styles.bottomBar}>
           <p className={styles.copyright}>
-            © {currentYear} Springfield Academy. All rights reserved.
+            © {currentYear} Springfield Academy. All rights reserved. Developed by Nyansa
           </p>
           <div className={styles.legalLinks}>
             <a href="#" className={styles.legalLink}>
