@@ -1,3 +1,4 @@
+// components/Table/Table.tsx
 import React, { useState } from 'react';
 import styles from './Table.module.css';
 
@@ -8,9 +9,9 @@ type ColumnType = 'string' | 'number' | 'currency' | 'date' | 'boolean';
 type ColumnFixed = 'left' | 'right';
 type TableVariant = 'default' | 'bordered' | 'stripped' | 'minimal' | 'compact';
 type TableSize = 'sm' | 'md' | 'lg';
-type ActionVariant = 'default' | 'primary' | 'danger' | 'success' | 'warning';
+type ActionVariant = 'default' | 'primary' | 'danger' | 'success' | 'warning'  | 'secondary';
 
-interface Column<T = any> {
+export interface Column<T = any> {
   key?: string;
   accessor?: string;
   header?: string;
@@ -26,9 +27,9 @@ interface Column<T = any> {
   placeholder?: string;
 }
 
-interface Action<T = any> {
+export interface Action<T = any> {
   label: string;
-  icon?: React.ReactNode | string;
+  icon?: React.ReactNode;
   iconOnly?: boolean;
   variant?: ActionVariant;
   onClick: (row: T, rowIndex: number) => void;
@@ -36,7 +37,7 @@ interface Action<T = any> {
   disabled?: (row: T) => boolean;
 }
 
-interface TableProps<T = any> {
+export interface TableProps<T = any> {
   // Data
   columns?: Column<T>[];
   data?: T[];
@@ -147,6 +148,11 @@ const Table = <T extends Record<string, any> = any>({
   const selectedRowIds = selectedRows.length > 0 ? selectedRows : localSelectedRows;
   const setSelectedRowIds = onSelectionChange || setLocalSelectedRows;
 
+  // Get unique key for row
+const getRowKey = (row: T, index: number): string | number => {
+  return (row as any)._id || (row as any).id || (row as any).student_id || (row as any).key || `row-${index}`;
+};
+
   // Sort data
   const getSortedData = (): T[] => {
     if (!sortable || !sortColumn) return data;
@@ -217,16 +223,11 @@ const Table = <T extends Record<string, any> = any>({
   // Handle select all
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      const allIds = displayData.map((row, index) => (row as any).id || generateRowId(row, index));
+      const allIds = displayData.map((row, index) => getRowKey(row, index));
       setSelectedRowIds(allIds);
     } else {
       setSelectedRowIds([]);
     }
-  };
-
-  // Generate unique row ID
-  const generateRowId = (row: T, index?: number): string | number => {
-    return (row as any).id || `row-${index}-${Math.random().toString(36).substr(2, 9)}`;
   };
 
   // Toggle row expansion
@@ -288,17 +289,17 @@ const Table = <T extends Record<string, any> = any>({
   const getColumnClasses = (column: Column<T>): string => {
     const classes: string[] = [];
     if (column.align) classes.push(styles[`align-${column.align}`]);
-    if (column.width) classes.push(styles[`col-width-${column.width}`]);
+    if (column.width && typeof column.width === 'string') classes.push(styles[`col-width-${column.width}`]);
     if (column.fixed) classes.push(styles[`fixed-${column.fixed}`]);
     return classes.join(' ');
   };
 
   // Check if all rows are selected
   const allSelected = displayData.length > 0 && 
-    displayData.every((row, index) => selectedRowIds.includes((row as any).id || generateRowId(row, index)));
+    displayData.every((row, index) => selectedRowIds.includes(getRowKey(row, index)));
 
   // Check if some rows are selected
-  const someSelected = displayData.some((row, index) => selectedRowIds.includes((row as any).id || generateRowId(row, index)));
+  const someSelected = displayData.some((row, index) => selectedRowIds.includes(getRowKey(row, index)));
 
   return (
     <div className={`${styles.tableContainer} ${styles[variant]} ${className}`}>
@@ -386,7 +387,7 @@ const Table = <T extends Record<string, any> = any>({
               
               <tbody>
                 {displayData.map((row, rowIndex) => {
-                  const rowId = (row as any).id || generateRowId(row, rowIndex);
+                  const rowId = getRowKey(row, rowIndex);
                   const isExpanded = expandedRows.includes(rowId);
                   const isSelected = selectedRowIds.includes(rowId);
                   
@@ -461,7 +462,7 @@ const Table = <T extends Record<string, any> = any>({
                                     key={index}
                                     className={`
                                       ${styles.actionButton}
-                                      ${styles[action.variant || 'default']}
+                                      ${action.variant ? styles[action.variant] : styles.default}
                                     `}
                                     onClick={(e) => {
                                       e.stopPropagation();
@@ -472,11 +473,7 @@ const Table = <T extends Record<string, any> = any>({
                                   >
                                     {action.icon && (
                                       <span className={styles.actionIcon}>
-                                        {typeof action.icon === 'string' ? (
-                                          <img src={action.icon} alt={action.label} />
-                                        ) : (
-                                          action.icon
-                                        )}
+                                        {action.icon}
                                       </span>
                                     )}
                                     {action.label && !action.iconOnly && (

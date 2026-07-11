@@ -1,0 +1,398 @@
+/* components/ABTL/AnalysisModal.module.css */
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.modal {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 16px 16px 0 0;
+}
+
+.modalHeader h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.modalBody {
+  padding: 24px;
+}
+
+.modalFooter {
+  padding: 16px 24px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.studentInfo {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.studentInfo h3 {
+  margin: 0 0 4px 0;
+  font-size: 1.25rem;
+  color: #1f2937;
+}
+
+.className {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.recommendationsSection {
+  margin-bottom: 32px;
+}
+
+.recommendationsSection h4 {
+  margin: 0 0 16px 0;
+  font-size: 1.125rem;
+  color: #1f2937;
+}
+
+.recommendationCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.recommendationCard {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.recommendationCard:hover {
+  transform: translateY(-4px);
+}
+
+.rank1 {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  border: 2px solid #ffd700;
+}
+
+.rank2 {
+  background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+  border: 2px solid #c0c0c0;
+}
+
+.rank3 {
+  background: linear-gradient(135deg, #cd7f32 0%, #e8a95b 100%);
+  border: 2px solid #cd7f32;
+}
+
+.medal {
+  font-size: 3rem;
+  margin-bottom: 8px;
+}
+
+.recommendationContent {
+  text-align: center;
+}
+
+.programmeName {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: #1f2937;
+}
+
+.fitScore {
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+}
+
+.rankLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #4b5563;
+}
+
+.allProgrammesSection {
+  margin-bottom: 32px;
+}
+
+.allProgrammesSection h4 {
+  margin: 0 0 16px 0;
+  font-size: 1.125rem;
+  color: #1f2937;
+}
+
+.tableContainer {
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.programmeTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.programmeTable th,
+.programmeTable td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.programmeTable th {
+  background: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+}
+
+.programmeTable tr:last-child td {
+  border-bottom: none;
+}
+
+.rankCell {
+  width: 60px;
+  text-align: center;
+}
+
+.medalSmall {
+  font-size: 1.25rem;
+}
+
+.programmeCell {
+  font-weight: 500;
+}
+
+.scoreCell {
+  width: 100px;
+}
+
+.scoreBadge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.scoreExcellent {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.scoreGood {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.scoreAverage {
+  background: #fed7aa;
+  color: #92400e;
+}
+
+.scoreLow {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.careerCell {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.careerSection {
+  margin-bottom: 32px;
+}
+
+.careerSection h4 {
+  margin: 0 0 16px 0;
+  font-size: 1.125rem;
+  color: #1f2937;
+}
+
+.careerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.careerCard {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  transition: background 0.2s;
+}
+
+.careerCard:hover {
+  background: #e5e7eb;
+}
+
+.careerIcon {
+  font-size: 1rem;
+}
+
+.strengthsSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.strengthsCard,
+.improvementCard {
+  padding: 16px;
+  border-radius: 12px;
+  background: #f9fafb;
+}
+
+.strengthsCard h5,
+.improvementCard h5 {
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+  color: #374151;
+}
+
+.strengthsCard ul,
+.improvementCard ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.strengthsCard li,
+.improvementCard li {
+  margin-bottom: 4px;
+  color: #4b5563;
+  font-size: 0.875rem;
+}
+
+.formulaReference {
+  margin-top: 24px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 16px;
+}
+
+.formulaReference summary {
+  cursor: pointer;
+  font-weight: 500;
+  color: #6b7280;
+  padding: 8px 0;
+}
+
+.formulaGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.formulaItem {
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+}
+
+.formulaItem strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #1f2937;
+}
+
+.purpose {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.formula {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.7rem;
+}
+
+.formula span {
+  background: #e5e7eb;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #374151;
+}
+
+.closeBtn {
+  padding: 8px 24px;
+  background: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background 0.2s;
+}
+
+.closeBtn:hover {
+  background: #4b5563;
+}
+
+@media (max-width: 768px) {
+  .recommendationCards {
+    grid-template-columns: 1fr;
+  }
+  
+  .strengthsSection {
+    grid-template-columns: 1fr;
+  }
+  
+  .careerGrid {
+    grid-template-columns: 1fr;
+  }
+}

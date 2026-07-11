@@ -1,0 +1,219 @@
+/* app/parent/results/components/PerformanceSummary.module.css */
+
+.summaryContainer {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.summaryCard {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.summaryItem {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.summaryIcon {
+  font-size: 32px;
+}
+
+.summaryInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.summaryLabel {
+  font-size: 11px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.summaryValue {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.summaryDivider {
+  width: 1px;
+  height: 50px;
+  background: #e5e7eb;
+}
+
+.gradeA {
+  color: #10b981;
+}
+
+.gradeB {
+  color: #3b82f6;
+}
+
+.gradeC {
+  color: #8b5cf6;
+}
+
+.gradeD {
+  color: #f59e0b;
+}
+
+.gradeE {
+  color: #f97316;
+}
+
+.gradeF {
+  color: #ef4444;
+}
+
+.gradeDefault {
+  color: #1f2937;
+}
+
+.positionFirst {
+  color: #fbbf24;
+}
+
+.positionSecond {
+  color: #94a3b8;
+}
+
+.positionThird {
+  color: #cd9a5b;
+}
+
+.positionOther {
+  color: #1f2937;
+}
+
+.statsCard {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.statsHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.statsIcon {
+  font-size: 24px;
+}
+
+.statsTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statLabel {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.statNumber {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.passedNumber {
+  color: #10b981;
+}
+
+.failedNumber {
+  color: #ef4444;
+}
+
+.remarksSection {
+  display: flex;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.remarksIcon {
+  font-size: 20px;
+}
+
+.remarksContent {
+  flex: 1;
+}
+
+.remarksLabel {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.remarksText {
+  font-size: 13px;
+  color: #374151;
+  margin: 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .summaryContainer {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .summaryCard {
+    padding: 16px;
+  }
+  
+  .summaryIcon {
+    font-size: 28px;
+  }
+  
+  .summaryValue {
+    font-size: 20px;
+  }
+  
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .statNumber {
+    font-size: 18px;
+  }
+}

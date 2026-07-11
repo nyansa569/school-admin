@@ -1,0 +1,12 @@
+/* app/(teacher)/layout.module.css */
+.container {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fa;
+  padding-left: 280px;
+}
+
+.main {
+  flex: 1;
+  overflow-x: auto;
+}

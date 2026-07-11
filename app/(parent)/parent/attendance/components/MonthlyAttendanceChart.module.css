@@ -1,0 +1,194 @@
+/* app/parent/attendance/components/MonthlyAttendanceChart.module.css */
+
+.container {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.chartHeader h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.presentColor {
+  background: #10b981;
+}
+
+.lateColor {
+  background: #f59e0b;
+}
+
+.absentColor {
+  background: #ef4444;
+}
+
+.excusedColor {
+  background: #8b5cf6;
+}
+
+.chartContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 20px 0;
+  min-height: 250px;
+}
+
+.monthColumn {
+  flex: 1;
+  text-align: center;
+}
+
+.monthName {
+  font-size: 12px;
+  font-weight: 500;
+  color: #4b5563;
+  margin-bottom: 12px;
+}
+
+.barsContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.barGroup {
+  display: flex;
+  flex-direction: column;
+  width: 40px;
+  height: 150px;
+  justify-content: flex-end;
+  gap: 2px;
+}
+
+.bar {
+  width: 100%;
+  border-radius: 4px;
+  transition: height 0.3s ease;
+  min-height: 4px;
+}
+
+.presentBar {
+  background: #10b981;
+}
+
+.lateBar {
+  background: #f59e0b;
+}
+
+.absentBar {
+  background: #ef4444;
+}
+
+.excusedBar {
+  background: #8b5cf6;
+}
+
+.monthRate {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-top: 8px;
+}
+
+.attendanceSummary {
+  margin-top: 24px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.summaryText {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #1f2937;
+  line-height: 1.5;
+}
+
+.summaryIcon {
+  font-size: 18px;
+}
+
+.warningText, .lateWarning {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.warningText {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.lateWarning {
+  background: #fffbeb;
+  color: #92400e;
+}
+
+.warningIcon, .lateIcon {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .chartHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .barGroup {
+    width: 30px;
+    height: 120px;
+  }
+  
+  .monthName {
+    font-size: 10px;
+  }
+  
+  .monthRate {
+    font-size: 10px;
+  }
+}

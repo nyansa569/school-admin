@@ -1,0 +1,597 @@
+/* app/(teacher)/teacher/(sub-teacher)/[module]/class/[classid]/subject/[subjectid]/components/AssessmentView.module.css */
+
+.container {
+  padding: 1.5rem;
+  background: #f8fafc;
+  min-height: calc(100vh - 120px);
+  border-radius: 16px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.subtitle {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  align-items: flex-end;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.filterGroup label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.filterGroup select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  background: white;
+  cursor: pointer;
+  min-width: 150px;
+}
+
+.filterGroup select:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.bulkSaveButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bulkSaveButton svg {
+  width: 16px;
+  height: 16px;
+}
+
+.bulkSaveButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.bulkSaveButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Summary Cards */
+.summaryCards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.cardIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cardIcon svg {
+  width: 20px;
+  height: 20px;
+  color: white;
+}
+
+.performanceColor {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.attitudeColor {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.behaviorColor {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.participationColor {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.2;
+}
+
+.cardLabel {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+/* Table */
+.tableContainer {
+  background: white;
+  border-radius: 12px;
+  overflow: auto;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.table th {
+  text-align: left;
+  padding: 0.875rem 1rem;
+  background: #f8fafc;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.875rem;
+  color: #334155;
+  vertical-align: top;
+}
+
+.table tr:hover {
+  background: #f8fafc;
+}
+
+.scoreCol {
+  width: 100px;
+}
+
+.actionCol {
+  width: 100px;
+}
+
+/* Student Cell */
+.studentCell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.studentAvatar {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  flex-shrink: 0;
+}
+
+/* Score Badge */
+.scoreBadge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  min-width: 55px;
+}
+
+.scoreExcellent {
+  background: #d4f4dd;
+  color: #0e7c3a;
+}
+
+.scoreGood {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.scoreAverage {
+  background: #feebc8;
+  color: #c05621;
+}
+
+.scoreBelowAverage {
+  background: #fed7aa;
+  color: #9c4221;
+}
+
+.scorePoor {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+.scoreNone {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.notSet {
+  color: #94a3b8;
+  font-size: 0.75rem;
+}
+
+/* Inputs */
+.scoreInput {
+  width: 80px;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.scoreInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.descriptionInput,
+.recommendationInput {
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.descriptionInput:focus,
+.recommendationInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.descriptionText,
+.recommendationText {
+  font-size: 0.8rem;
+  color: #475569;
+  line-height: 1.4;
+  display: block;
+  max-width: 250px;
+}
+
+/* Action Buttons */
+.actionButtons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.editButton,
+.saveButton,
+.cancelButton {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.4rem 0.75rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editButton svg,
+.saveButton svg,
+.cancelButton svg {
+  width: 14px;
+  height: 14px;
+}
+
+.editButton {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.editButton:hover {
+  background: #e2e8f0;
+}
+
+.saveButton {
+  background: #10b981;
+  color: white;
+}
+
+.saveButton:hover:not(:disabled) {
+  background: #059669;
+}
+
+.cancelButton {
+  background: #ef4444;
+  color: white;
+}
+
+.cancelButton:hover {
+  background: #dc2626;
+}
+
+.saveButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Legend */
+.legend {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.legend h4 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.legendItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #475569;
+}
+
+.legendColor {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+/* Unauthorized */
+.unauthorized {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+}
+
+.unauthorizedIcon {
+  width: 70px;
+  height: 70px;
+  background: #fed7d7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.unauthorizedIcon svg {
+  width: 40px;
+  height: 40px;
+  color: #c53030;
+}
+
+.unauthorized h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.unauthorized p {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 0.75rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading p {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .summaryCards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .filters {
+    flex-direction: column;
+  }
+
+  .filterGroup select {
+    min-width: auto;
+  }
+
+  .actionButtons {
+    flex-direction: column;
+  }
+
+  .descriptionText,
+  .recommendationText {
+    max-width: 150px;
+  }
+}
+
+
+/* Add to AssessmentView.module.css */
+.gradeCol {
+  width: 80px;
+}
+
+.gradeBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  min-width: 40px;
+}
+
+.gradeA { background: #10b981; color: white; }
+.gradeB { background: #3b82f6; color: white; }
+.gradeC { background: #8b5cf6; color: white; }
+.gradeD { background: #f59e0b; color: white; }
+.gradeE { background: #f97316; color: white; }
+.gradeF { background: #ef4444; color: white; }
+.gradeNone { background: #e5e7eb; color: #6b7280; }
+
+.gradeInput {
+  width: 60px;
+  padding: 6px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.remarksInput, .recommendationInput {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 13px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.remarksText, .recommendationText {
+  display: block;
+  max-width: 200px;
+  word-wrap: break-word;
+  font-size: 13px;
+  color: #374151;
+}
+
+.infoBanner {
+  margin-top: 20px;
+  padding: 12px 16px;
+  background: #eff6ff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #1e40af;
+}
+
+.infoBanner svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+  background: #f9fafb;
+  border-radius: 8px;
+}

@@ -858,3 +858,261 @@
     box-shadow: none;
   }
 }
+
+
+/* Loading Container */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #11998e;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* View Modal */
+.viewModal {
+  background: white;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+.viewModalBody {
+  padding: 2rem;
+  overflow-y: auto;
+  max-height: calc(90vh - 140px);
+}
+
+/* Application Header */
+.appHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.appHeaderInfo h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 0.25rem 0;
+}
+
+.appHeaderInfo p {
+  font-size: 0.813rem;
+  color: #718096;
+  margin: 0;
+}
+
+/* Info Card */
+.infoCard {
+  background: #f7fafc;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.infoCard h4 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #4a5568;
+  margin: 0 0 0.75rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.813rem;
+}
+
+.infoRow span {
+  color: #718096;
+  font-weight: 500;
+}
+
+.infoRow strong {
+  color: #2d3748;
+  font-weight: 600;
+  text-align: right;
+  flex: 1;
+  margin-left: 1rem;
+}
+
+/* Timeline */
+.timelineItem {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+.timelineDot {
+  width: 8px;
+  height: 8px;
+  background: #11998e;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.timelineDotRed {
+  width: 8px;
+  height: 8px;
+  background: #dc2626;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.timelineLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.timelineDate {
+  font-size: 0.7rem;
+  color: #718096;
+}
+
+.timelineBy {
+  font-size: 0.65rem;
+  color: #a0aec0;
+  margin-top: 2px;
+}
+
+.timelineReason {
+  font-size: 0.7rem;
+  color: #dc2626;
+  margin-top: 4px;
+}
+
+/* Field Note */
+.fieldNote {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Action Buttons in Modal Footer */
+.reviewButton {
+  padding: 0.625rem 1.25rem;
+  background: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reviewButton:hover {
+  background: #d97706;
+}
+
+.approveButton {
+  padding: 0.625rem 1.25rem;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.approveButton:hover {
+  background: #059669;
+}
+
+.declineButton {
+  padding: 0.625rem 1.25rem;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.declineButton:hover {
+  background: #b91c1c;
+}
+
+.editButton {
+  padding: 0.625rem 1.25rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editButton:hover {
+  background: #2563eb;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .appHeader {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+  
+  .infoRow {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .infoRow strong {
+    text-align: left;
+    margin-left: 0;
+  }
+  
+  .viewModalBody {
+    padding: 1.5rem;
+  }
+}

@@ -1,41 +1,34 @@
-"use client";
-
-import { usePathname } from "next/navigation";
+// app/(dashboard)/layout.tsx
+import { redirect } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import styles from "./layout.module.css";
+import { getSession } from "@/lib/auth";
+import DashboardClient from "./DashboardClient";
 
-const pageTitles: Record<string, string> = {
-  "/": "Dashboard",
-  "/students": "Students",
-  "/teachers": "Teachers",
-  "/classes": "Classes",
-  "/settings": "Settings",
-  "/support": "Help & Support",
-};
-
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
-  const currentPage = pageTitles[pathname] || "Dashboard";
+  const session = await getSession();
+
+  if (!session) {
+    redirect("/auth/login");
+  }
+  if (session.user.role === "teacher") {
+    redirect("/teacher/dashboard");
+  }
+  if (session.user.role === "parent") {
+    redirect("/parent");
+  }
+  if (session.user.role !== "admin") {
+    redirect("/auth/login");
+  }
 
   return (
-    <html lang="en">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className={styles.body}>
-        <Sidebar />
-
-        <main className={styles.main}>
-          <div>{children}</div>
-        </main>
-      </body>
-    </html>
+    <div className={styles.body}>
+      <Sidebar />
+      <DashboardClient>{children}</DashboardClient>
+    </div>
   );
 }

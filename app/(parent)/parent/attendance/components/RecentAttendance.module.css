@@ -1,0 +1,226 @@
+/* app/parent/attendance/components/RecentAttendance.module.css */
+
+.container {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.header {
+  margin-bottom: 20px;
+}
+
+.header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+}
+
+.header p {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.filterTabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.filterTab {
+  padding: 6px 12px;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filterTab:hover {
+  background: #e5e7eb;
+}
+
+.activeFilter {
+  background: #6A1B2A;
+  color: white;
+}
+
+.recordsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 500px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+}
+
+.recordCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.recordCard:hover {
+  background: #f3f4f6;
+}
+
+.recordDate {
+  text-align: center;
+  min-width: 50px;
+}
+
+.dateDay {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1;
+}
+
+.dateMonth {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+.recordStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 100px;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+.statusIcon {
+  font-size: 14px;
+}
+
+.statusText {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.statusPresent {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.statusAbsent {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.statusLate {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.statusExcused {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.recordDetails {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.detailIcon {
+  font-size: 12px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.emptyIcon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.emptyState p {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  background: #fffbeb;
+  border-radius: 8px;
+  font-size: 11px;
+  color: #92400e;
+  margin-top: 16px;
+}
+
+.noteIcon {
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
+  .recordCard {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .recordDate {
+    min-width: 45px;
+  }
+  
+  .dateDay {
+    font-size: 16px;
+  }
+  
+  .recordStatus {
+    min-width: 85px;
+    padding: 4px 10px;
+  }
+  
+  .recordDetails {
+    width: 100%;
+    margin-left: 58px;
+  }
+  
+  .filterTabs {
+    gap: 6px;
+  }
+  
+  .filterTab {
+    padding: 4px 10px;
+    font-size: 11px;
+  }
+}

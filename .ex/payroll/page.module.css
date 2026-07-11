@@ -1,0 +1,315 @@
+/* Page Layout */
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f8fafc;
+}
+
+.contentWrapper {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Header Actions */
+.addButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+.addButton:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Sections */
+.filterSection {
+  margin-bottom: 24px;
+}
+.tableSection {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* Table Cell Styles */
+.staffId {
+  font-family: monospace;
+  font-weight: 600;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.periodCell {
+  display: flex;
+  flex-direction: column;
+}
+.month {
+  font-weight: 600;
+  color: #1e293b;
+}
+.year {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.allowanceAmt {
+  color: #10b981;
+  font-weight: 500;
+}
+.deductAmt {
+  color: #ef4444;
+  font-weight: 500;
+}
+.netSalary {
+  color: #0f172a;
+  font-size: 15px;
+}
+
+/* Status Badges */
+.statusBadge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.statusPaid {
+  background: #dcfce7;
+  color: #16a34a;
+}
+.statusPending {
+  background: #fef3c7;
+  color: #d97706;
+}
+.statusFailed {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Expanded Row */
+.expandedContent {
+  padding: 20px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+.expandedGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+.expandedSection h4 {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: #64748b;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 8px;
+}
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #475569;
+}
+
+/* Modals */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal {
+  background: white;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+.modalHeader h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #0f172a;
+}
+.subHeader {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 4px;
+  display: block;
+}
+.closeButton {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.modalBody {
+  padding: 24px;
+}
+
+/* Payslip Layout */
+.slipLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  margin-bottom: 24px;
+}
+.slipColumn h3 {
+  font-size: 16px;
+  color: #1e293b;
+  margin: 0 0 16px;
+}
+.slipGroup {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed #e2e8f0;
+}
+.groupTitle {
+  font-size: 12px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.slipRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #475569;
+}
+.slipRow input {
+  width: 120px;
+  padding: 6px 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 13px;
+  text-align: right;
+}
+.capitalize {
+  text-transform: capitalize;
+}
+
+.slipTotal {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  color: #0f172a;
+}
+.deductText {
+  color: #ef4444;
+}
+
+.slipFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f1f5f9;
+  padding: 16px 24px;
+  border-radius: 8px;
+  margin-top: 16px;
+}
+.netBox h1 {
+  margin: 0;
+  color: #10b981;
+  font-size: 28px;
+}
+.netBox span {
+  display: block;
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.statusInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.statusInfo small {
+  color: #94a3b8;
+}
+
+.modalActions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.cancelButton {
+  padding: 10px 20px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+}
+.saveButton {
+  padding: 10px 20px;
+  background: #0f172a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.payButton {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .slipLayout {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,134 @@
+/* app/parent/fees/components/PaymentHistory.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.paymentCard {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.paymentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.paymentReceipt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.receiptIcon {
+  font-size: 24px;
+}
+
+.receiptNumber {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 2px;
+}
+
+.paymentDate {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.paymentAmount {
+  font-size: 18px;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.paymentDetails {
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.methodIcon {
+  margin-right: 4px;
+}
+
+.detailItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 13px;
+}
+
+.detailLabel {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.detailValue {
+  color: #1f2937;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 16px;
+}
+
+.emptyIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.emptyState h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.emptyState p {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .paymentHeader {
+    padding: 12px 16px;
+  }
+  
+  .receiptIcon {
+    font-size: 20px;
+  }
+  
+  .receiptNumber {
+    font-size: 12px;
+  }
+  
+  .paymentAmount {
+    font-size: 16px;
+  }
+  
+  .paymentDetails {
+    padding: 12px 16px;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .detailItem {
+    font-size: 12px;
+  }
+}

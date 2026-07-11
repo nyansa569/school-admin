@@ -1,0 +1,448 @@
+/* app/(teacher)/teacher/dashboard/page.module.css */
+
+.container {
+  padding: 1.5rem;
+  background: #f8fafc;
+  min-height: calc(100vh - 70px);
+}
+
+/* Welcome Section */
+.welcomeSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.welcomeTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.welcomeSubtitle {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.profileBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: white;
+  border-radius: 40px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.profileName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.profileDept {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.statCard {
+  background: white;
+  border-radius: 16px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.statIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.statIcon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.statContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.2;
+}
+
+.statLabel {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+/* Section */
+.section {
+  margin-bottom: 2rem;
+}
+
+.sectionHeader {
+  margin-bottom: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.sectionSubtitle {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* Modules Grid */
+.modulesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.moduleCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.moduleCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.moduleIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.moduleContent {
+  flex: 1;
+}
+
+.moduleName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.moduleDesc {
+  font-size: 0.7rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.moduleArrow {
+  font-size: 1rem;
+  color: #94a3b8;
+  transition: transform 0.2s ease;
+}
+
+.moduleCard:hover .moduleArrow {
+  transform: translateX(4px);
+  color: #3b82f6;
+}
+
+/* Two Column Grid */
+.twoColumnGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Info Card */
+.infoCard {
+  background: white;
+  border-radius: 16px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.infoCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.infoCardTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.infoCardCount {
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  background: #f1f5f9;
+  border-radius: 20px;
+  color: #64748b;
+}
+
+.infoCardList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.listItemIcon {
+  font-size: 1.25rem;
+}
+
+.listItemContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.listItemTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.listItemSub {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+.emptyMessage {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.75rem;
+  padding: 1rem;
+}
+
+/* Academic Year */
+.academicYearContent {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+.academicYearIcon {
+  font-size: 2rem;
+}
+
+.academicYearInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.academicYearValue {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.academicYearTerm {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+/* Activity Item */
+.activityItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+}
+
+.activityIcon {
+  font-size: 1.25rem;
+}
+
+.activityContent {
+  flex: 1;
+}
+
+.activityTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1e293b;
+}
+
+.activityMeta {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.activityType {
+  font-size: 0.65rem;
+  padding: 0.125rem 0.375rem;
+  background: #f1f5f9;
+  border-radius: 4px;
+  color: #64748b;
+}
+
+.activityDate {
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading p {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+/* Error */
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+}
+
+.errorIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.error h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.error p {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .statsGrid,
+  .modulesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .twoColumnGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .welcomeSection {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profileBadge {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 640px) {
+  .statsGrid,
+  .modulesGrid {
+    grid-template-columns: 1fr;
+  }
+}

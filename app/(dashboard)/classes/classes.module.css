@@ -747,3 +747,387 @@
     box-shadow: none;
   }
 }
+
+
+/* Add to classes.module.css */
+.tabsContainer {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 0;
+}
+
+.tab {
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #718096;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.tab:hover {
+  color: #667eea;
+}
+
+.activeTab {
+  color: #667eea;
+}
+
+.activeTab::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #667eea;
+}
+
+.largeModal {
+  max-width: 700px;
+}
+
+.bulkSubjects {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 1rem;
+  background: #f7fafc;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.bulkCheckbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #2d3748;
+  cursor: pointer;
+}
+
+.bulkButton {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #48bb78 0%, #2f855a 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+}
+
+.bulkButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hint {
+  font-size: 0.875rem;
+  color: #718096;
+  margin-bottom: 1rem;
+}
+
+.deptCell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.deptIcon {
+  font-size: 1.5rem;
+}
+
+.deptName {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+
+/* Add to classes.module.css */
+
+/* Loading Container */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #11998e;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingContainer p {
+  color: #718096;
+  font-size: 0.9375rem;
+}
+
+/* View Modal */
+.viewModal {
+  background: white;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+.viewModalBody {
+  padding: 2rem;
+  overflow-y: auto;
+  max-height: calc(90vh - 140px);
+}
+
+/* View Header */
+.viewHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.viewAvatar {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: white;
+}
+
+.viewInfo h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 0.25rem 0;
+}
+
+.viewInfo p {
+  font-size: 0.875rem;
+  color: #718096;
+  margin: 0;
+}
+
+/* View Grid */
+.viewGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.viewCard {
+  background: #f7fafc;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+
+.viewCard h4 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #4a5568;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.viewRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.5rem 0;
+  font-size: 0.875rem;
+}
+
+.viewRow:not(:last-child) {
+  border-bottom: 1px solid #edf2f7;
+}
+
+.viewRow span {
+  color: #718096;
+  font-weight: 500;
+}
+
+.viewRow strong {
+  color: #2d3748;
+  font-weight: 600;
+  text-align: right;
+  flex: 1;
+  margin-left: 1rem;
+}
+
+/* Department Cell */
+.deptCell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.deptIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: white;
+}
+
+.deptName {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 0.9375rem;
+}
+
+.deptCode {
+  font-size: 0.75rem;
+  color: #718096;
+  margin-top: 2px;
+}
+
+/* Class Cell */
+.classCell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.classIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: white;
+}
+
+.className {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 0.9375rem;
+}
+
+.classLevel {
+  font-size: 0.75rem;
+  color: #718096;
+  margin-top: 2px;
+  text-transform: capitalize;
+}
+
+/* Status Badges */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.875rem;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.statusActive {
+  background: #d4f4dd;
+  color: #0e7c3a;
+}
+
+.statusInactive {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+/* Modal Tabs */
+.modalTabs {
+  display: flex;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f7fafc;
+}
+
+
+
+
+/* Checkbox Label */
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: normal;
+}
+
+.checkboxLabel input {
+  width: auto;
+  margin: 0;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .viewGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .viewHeader {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .viewInfo {
+    text-align: center;
+  }
+  
+  .viewRow {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .viewRow strong {
+    text-align: left;
+    margin-left: 0;
+  }
+  
+  .viewModalBody {
+    padding: 1.5rem;
+  }
+  
+  .modalTabs {
+    overflow-x: auto;
+  }
+  
+  .tab {
+    flex: none;
+    padding: 0.75rem 1rem;
+    white-space: nowrap;
+  }
+}

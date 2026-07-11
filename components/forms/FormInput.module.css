@@ -1,0 +1,225 @@
+/* Light mode only – solid colors, no gradients */
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Label row – separates label from required badge */
+.labelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #1e293b;
+  letter-spacing: 0;
+  line-height: 1.4;
+}
+
+.requiredBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.requiredBadge svg {
+  color: #94a3b8;
+}
+
+/* Base input styles – clean, flat */
+.input,
+.select,
+.textarea {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  color: #0f172a;
+  font-size: 0.9rem;
+  padding: 0 14px;
+  height: 44px;
+  outline: none;
+  transition: all 0.15s ease;
+  width: 100%;
+  font-family: inherit;
+}
+
+.textarea {
+  height: auto;
+  padding: 12px 14px;
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+/* Focus states – simple and clear */
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: #2c7da0;
+  background-color: #fafcff;
+}
+
+/* Error state */
+.input.error,
+.select.error,
+.textarea.error {
+  border-color: #e53e3e;
+  background-color: #fffbfb;
+}
+
+.input.error:focus,
+.select.error:focus,
+.textarea.error:focus {
+  border-color: #e53e3e;
+  background-color: #fffbfb;
+}
+
+/* Placeholder styling */
+.input::placeholder,
+.textarea::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+/* Hint & error messages – dedicated feedback area */
+.feedback {
+  min-height: 20px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.hint {
+  color: #64748b;
+}
+
+.errorMsg {
+  color: #e53e3e;
+}
+
+/* Input with left icon */
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.inputWrapper .input {
+  padding-left: 42px;
+}
+
+.inputIcon {
+  position: absolute;
+  left: 14px;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+/* File input – distinct visual style */
+.fileWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.fileInput {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 44px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.filePlaceholder {
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0 14px;
+  height: 44px;
+  width: 100%;
+  font-size: 0.85rem;
+  color: #475569;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.fileInput:hover + .filePlaceholder {
+  border-color: #2c7da0;
+  background: #f1f5f9;
+}
+
+/* Select wrapper – custom chevron */
+.selectWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.select {
+  appearance: none;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.selectIcon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+/* Form row layouts – responsive grid */
+.row {
+  display: grid;
+  gap: 20px;
+  width: 100%;
+}
+
+.row2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+.row3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* Responsive behavior */
+@media (max-width: 640px) {
+  .row2,
+  .row3 {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .input,
+  .select,
+  .textarea,
+  .filePlaceholder {
+    height: 42px;
+    font-size: 0.85rem;
+  }
+
+  .label {
+    font-size: 0.8rem;
+  }
+}

@@ -1,918 +1,1032 @@
-'use client';
+// app/(dashboard)/assessments/page.tsx
+"use client";
 
-import React, { useState, useMemo } from 'react';
-import styles from './assessments.module.css';
-import { assessmentsMockData } from '@/data/assessmentMockData';
-import StatFilter from '@/components/StatFilter/StatFilter';
-import Header from '@/components/Header/Header';
-import Stats from '@/components/Stats/Stats';
-import Table from '@/components/Table/Table';
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import {
+  getClasses,
+  getSubjects,
+  getTeachers,
+  getAcademicYears,
+  getTerms,
+  getStudentAssessments,
+  getAssessmentSummaryByClass,
+  getAssessmentSummaryBySubject,
+  getAssessmentSummaryByTeacher,
+  getOverallAssessmentStats,
+  getAssessmentTypes,
+} from "@/lib/action/admin/assessment";
+import Header from "@/components/Header/Header";
+import Stats from "@/components/Stats/Stats";
+import Table from "@/components/Table/Table";
+import styles from "./page.module.css";
+import { exportToCSV } from "@/utils/export/csv";
+import { exportToPDF } from "@/utils/export/pdf";
 
-// Types
-interface Course {
-  id: string;
+type ViewType = "overview" | "byClass" | "bySubject" | "byTeacher";
+
+type Term = {
+  id: number;
+  term_number: number;
   name: string;
-  code: string;
-}
+  is_active: boolean;
+};
 
-interface Class {
-  id: string;
+type AcademicYear = {
+  id: number;
+  year: number;
   name: string;
-}
+  is_active: boolean;
+};
 
-interface Teacher {
-  id: string;
-  fullName: string;
-}
+export default function AssessmentsPage() {
+  const [loading, setLoading] = useState(true);
+  const [viewType, setViewType] = useState<ViewType>("overview");
+  const [classes, setClasses] = useState<any[]>([]);
+  const [subjects, setSubjects] = useState<any[]>([]);
+  const [teachers, setTeachers] = useState<any[]>([]);
+  const [academicYears, setAcademicYears] = useState<AcademicYear[]>([]);
+  const [terms, setTerms] = useState<Term[]>([]);
+  const [assessmentTypes, setAssessmentTypes] = useState<any[]>([]);
+  
+  // Filters
+  const [selectedClass, setSelectedClass] = useState<string>("");
+  const [selectedSubject, setSelectedSubject] = useState<string>("");
+  const [selectedTeacher, setSelectedTeacher] = useState<string>("");
+  const [selectedAcademicYear, setSelectedAcademicYear] = useState<string>("");
+  const [selectedTermId, setSelectedTermId] = useState<string>("");
+  const [selectedAssessmentType, setSelectedAssessmentType] = useState<string>("");
+  
+  // Data states
+  const [overallStats, setOverallStats] = useState<any>(null);
+  const [classSummary, setClassSummary] = useState<any>(null);
+  const [subjectSummary, setSubjectSummary] = useState<any>(null);
+  const [teacherSummary, setTeacherSummary] = useState<any>(null);
+  const [assessments, setAssessments] = useState<any[]>([]);
 
-interface Assessment {
-  id: string;
-  title: string;
-  // type: 'Assignment' | 'Test' | 'Quiz' | 'Midterm' | 'Exam' | 'Practical';
-  type: string;
-  course: Course;
-  class: Class;
-  teacher: Teacher;
-  academicYear: string;
-  term: string;
-  maxScore: number;
-  weight: number;
-  dateGiven: string;
-  dueDate: string;
-  published: boolean;
-  createdAt: string;
-}
+  useEffect(() => {
+    loadFilters();
+    loadAssessmentTypes();
+  }, []);
 
-const AssessmentsAdminPage = () => {
-  const [assessments, setAssessments] = useState<Assessment[]>(assessmentsMockData);
-  const [filteredAssessments, setFilteredAssessments] = useState<Assessment[]>(assessments);
-  const [showModal, setShowModal] = useState(false);
-  const [modalMode, setModalMode] = useState<'create' | 'edit' | 'view'>('create');
-  const [currentAssessment, setCurrentAssessment] = useState<Assessment | null>(null);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [assessmentToDelete, setAssessmentToDelete] = useState<string | null>(null);
+  useEffect(() => {
+    if (selectedAcademicYear) {
+      loadTerms(parseInt(selectedAcademicYear));
+    } else {
+      setTerms([]);
+    }
+  }, [selectedAcademicYear]);
 
-  // Form state
-  const [formData, setFormData] = useState<Partial<Assessment>>({
-    title: '',
-    type: 'Test',
-    course: {
-      id: '',
-      name: '',
-      code: ''
-    },
-    class: {
-      id: '',
-      name: ''
-    },
-    teacher: {
-      id: '',
-      fullName: ''
-    },
-    academicYear: '2025/2026',
-    term: 'First Term',
-    maxScore: 100,
-    weight: 10,
-    dateGiven: '',
-    dueDate: '',
-    published: false
-  });
+  useEffect(() => {
+    if (viewType === "overview") {
+      loadOverallStats();
+    } else if (viewType === "byClass" && selectedClass) {
+      loadClassSummary();
+    } else if (viewType === "bySubject" && selectedSubject) {
+      loadSubjectSummary();
+    } else if (viewType === "byTeacher" && selectedTeacher) {
+      loadTeacherSummary();
+    }
+  }, [viewType, selectedClass, selectedSubject, selectedTeacher, selectedAcademicYear, selectedTermId, selectedAssessmentType]);
 
-  // Calculate stats
-  const stats = useMemo(() => {
-    const totalAssessments = assessments.length;
-    const published = assessments.filter(a => a.published).length;
-    const unpublished = totalAssessments - published;
+  const loadFilters = async () => {
+    const classesResult = await getClasses();
+    if (classesResult.classes) setClasses(classesResult.classes);
+
+    const subjectsResult = await getSubjects();
+    if (subjectsResult.subjects) setSubjects(subjectsResult.subjects);
+
+    const teachersResult = await getTeachers();
+    if (teachersResult.teachers) setTeachers(teachersResult.teachers);
+
+    const yearsResult = await getAcademicYears();
+    if (yearsResult.years) setAcademicYears(yearsResult.years);
+  };
+
+  const loadTerms = async (academicYearId: number) => {
+    const result = await getTerms(academicYearId);
+    if (result.terms) setTerms(result.terms);
+  };
+
+  const loadAssessmentTypes = async () => {
+    const result = await getAssessmentTypes();
+    if (result.types) setAssessmentTypes(result.types);
+  };
+
+  const loadOverallStats = async () => {
+    setLoading(true);
+    const result = await getOverallAssessmentStats(
+      selectedAcademicYear ? parseInt(selectedAcademicYear) : undefined,
+      selectedTermId ? parseInt(selectedTermId) : undefined
+    );
+    if (result.stats) setOverallStats(result.stats);
     
-    // Count by type
-    const tests = assessments.filter(a => a.type === 'Test').length;
-    const assignments = assessments.filter(a => a.type === 'Assignment').length;
-    const exams = assessments.filter(a => a.type === 'Exam' || a.type === 'Midterm').length;
+    const assessmentTypeValue = selectedAssessmentType as "performance" | "attitude" | "behavior" | "participation" | undefined;
+    
+    const assessmentsResult = await getStudentAssessments(
+      undefined,
+      undefined,
+      undefined,
+      selectedAcademicYear ? parseInt(selectedAcademicYear) : undefined,
+      selectedTermId ? parseInt(selectedTermId) : undefined,
+      assessmentTypeValue
+    );
+    if (assessmentsResult.assessments) {
+      setAssessments(assessmentsResult.assessments);
+    }
+    setLoading(false);
+  };
 
-    // Calculate upcoming (due dates in future)
-    const today = new Date();
-    const upcoming = assessments.filter(a => new Date(a.dueDate) > today).length;
+  const loadClassSummary = async () => {
+    setLoading(true);
+    const result = await getAssessmentSummaryByClass(
+      parseInt(selectedClass),
+      selectedAcademicYear ? parseInt(selectedAcademicYear) : undefined,
+      selectedTermId ? parseInt(selectedTermId) : undefined
+    );
+    if (result.class) setClassSummary(result);
+    setLoading(false);
+  };
 
-    // Calculate average weight
-    const avgWeight = assessments.length > 0
-      ? (assessments.reduce((sum, a) => sum + a.weight, 0) / assessments.length).toFixed(1)
-      : 0;
+  const loadSubjectSummary = async () => {
+    setLoading(true);
+    const result = await getAssessmentSummaryBySubject(
+      parseInt(selectedSubject),
+      selectedAcademicYear ? parseInt(selectedAcademicYear) : undefined,
+      selectedTermId ? parseInt(selectedTermId) : undefined
+    );
+    if (result.subject) setSubjectSummary(result);
+    setLoading(false);
+  };
 
+  const loadTeacherSummary = async () => {
+    setLoading(true);
+    const result = await getAssessmentSummaryByTeacher(
+      parseInt(selectedTeacher),
+      selectedAcademicYear ? parseInt(selectedAcademicYear) : undefined,
+      selectedTermId ? parseInt(selectedTermId) : undefined
+    );
+    if (result.teacher) setTeacherSummary(result);
+    setLoading(false);
+  };
+
+  // ============================================
+  // EXPORT FUNCTIONALITY
+  // ============================================
+
+  // Export columns for Overview (Assessments)
+  const getAssessmentExportColumns = () => [
+    { header: "Student Name", accessor: (row: any) => row.student ? `${row.student.first_name} ${row.student.last_name}` : "—" },
+    { header: "Student ID", accessor: (row: any) => row.student?.admission_number || row.student?.student_number || "—" },
+    { header: "Class", accessor: (row: any) => row.class?.name || "—" },
+    { header: "Subject", accessor: (row: any) => row.subject?.title || "—" },
+    { header: "Assessment Type", accessor: (row: any) => row.assessment_type || "—" },
+    { header: "Score (%)", accessor: (row: any) => row.numeric_score?.toString() || "—" },
+    { header: "Grade", accessor: (row: any) => row.letter_grade || "—" },
+    { header: "Teacher", accessor: (row: any) => row.teacher ? `${row.teacher.first_name} ${row.teacher.last_name}` : "—" },
+    { header: "Remarks", accessor: (row: any) => row.remarks || "—" },
+    { header: "Recommendations", accessor: (row: any) => row.recommendations || "—" },
+    { header: "Date", accessor: (row: any) => new Date(row.created_at).toLocaleDateString() },
+  ];
+
+  // Export columns for By Class view
+  const getClassExportColumns = () => [
+    { header: "Class", accessor: (row: any) => classSummary?.class?.name || "—" },
+    { header: "Student Name", accessor: (row: any) => row.student.name || `${row.student.first_name} ${row.student.last_name}` },
+    { header: "Student ID", accessor: (row: any) => row.student.admission_number || row.student.student_number || "—" },
+    { header: "Performance Score (%)", accessor: (row: any) => row.assessments?.performance?.score?.toString() || "—" },
+    { header: "Performance Grade", accessor: (row: any) => row.assessments?.performance?.grade || "—" },
+    { header: "Performance Remarks", accessor: (row: any) => row.assessments?.performance?.remarks || "—" },
+    { header: "Attitude Score (%)", accessor: (row: any) => row.assessments?.attitude?.score?.toString() || "—" },
+    { header: "Attitude Grade", accessor: (row: any) => row.assessments?.attitude?.grade || "—" },
+    { header: "Attitude Remarks", accessor: (row: any) => row.assessments?.attitude?.remarks || "—" },
+    { header: "Behavior Score (%)", accessor: (row: any) => row.assessments?.behavior?.score?.toString() || "—" },
+    { header: "Behavior Grade", accessor: (row: any) => row.assessments?.behavior?.grade || "—" },
+    { header: "Behavior Remarks", accessor: (row: any) => row.assessments?.behavior?.remarks || "—" },
+    { header: "Participation Score (%)", accessor: (row: any) => row.assessments?.participation?.score?.toString() || "—" },
+    { header: "Participation Grade", accessor: (row: any) => row.assessments?.participation?.grade || "—" },
+    { header: "Participation Remarks", accessor: (row: any) => row.assessments?.participation?.remarks || "—" },
+    { header: "Average Score (%)", accessor: (row: any) => row.averageScore || "—" },
+  ];
+
+  // Export columns for By Subject view
+  const getSubjectExportColumns = () => [
+    { header: "Subject", accessor: () => subjectSummary?.subject?.title || "—" },
+    { header: "Subject Code", accessor: () => subjectSummary?.subject?.subject_code || "—" },
+    { header: "Class", accessor: (row: any) => row.class?.name || "—" },
+    { header: "Total Students", accessor: (row: any) => row.totalStudents || 0 },
+    { header: "Total Assessments", accessor: (row: any) => row.totalAssessments || 0 },
+    { header: "Average Score (%)", accessor: (row: any) => row.averageScore || "—" },
+    { header: "Performance Count", accessor: (row: any) => row.typeCounts?.performance || 0 },
+    { header: "Attitude Count", accessor: (row: any) => row.typeCounts?.attitude || 0 },
+    { header: "Behavior Count", accessor: (row: any) => row.typeCounts?.behavior || 0 },
+    { header: "Participation Count", accessor: (row: any) => row.typeCounts?.participation || 0 },
+  ];
+
+  // Export columns for By Teacher view
+  const getTeacherExportColumns = () => [
+    { header: "Teacher", accessor: () => teacherSummary?.teacher ? `${teacherSummary.teacher.first_name} ${teacherSummary.teacher.last_name}` : "—" },
+    { header: "Class", accessor: (row: any) => row.class?.name || "—" },
+    { header: "Subject", accessor: (row: any) => row.subject?.title || "—" },
+    { header: "Total Students", accessor: (row: any) => row.totalStudents || 0 },
+    { header: "Total Assessments", accessor: (row: any) => row.totalAssessments || 0 },
+    { header: "Average Score (%)", accessor: (row: any) => row.averageScore || "—" },
+  ];
+
+  const handleExport = useCallback(async (format: "pdf" | "csv") => {
+    let dataToExport: any[] = [];
+    let columns: any[] = [];
+    let title = "";
+    let filename = "";
+    let subtitle = "";
+
+    switch (viewType) {
+      case "overview":
+        dataToExport = assessments;
+        columns = getAssessmentExportColumns();
+        title = "Assessments Report";
+        filename = `assessments-${new Date().toISOString().split("T")[0]}`;
+        subtitle = `Total Assessments: ${dataToExport.length} | Generated on ${new Date().toLocaleDateString()}`;
+        break;
+      case "byClass":
+        if (!classSummary?.students) {
+          alert("No class summary data to export");
+          return;
+        }
+        dataToExport = classSummary.students;
+        columns = getClassExportColumns();
+        title = `Class Assessment Report - ${classSummary.class?.name || "Selected Class"}`;
+        filename = `class-assessments-${classSummary.class?.name || "class"}-${new Date().toISOString().split("T")[0]}`;
+        subtitle = `Class: ${classSummary.class?.name} | Total Students: ${dataToExport.length} | Generated on ${new Date().toLocaleDateString()}`;
+        break;
+      case "bySubject":
+        if (!subjectSummary?.classes) {
+          alert("No subject summary data to export");
+          return;
+        }
+        dataToExport = subjectSummary.classes;
+        columns = getSubjectExportColumns();
+        title = `Subject Assessment Report - ${subjectSummary.subject?.title || "Selected Subject"}`;
+        filename = `subject-assessments-${subjectSummary.subject?.title || "subject"}-${new Date().toISOString().split("T")[0]}`;
+        subtitle = `Subject: ${subjectSummary.subject?.title} (${subjectSummary.subject?.subject_code}) | Total Classes: ${dataToExport.length} | Generated on ${new Date().toLocaleDateString()}`;
+        break;
+      case "byTeacher":
+        if (!teacherSummary?.details) {
+          alert("No teacher summary data to export");
+          return;
+        }
+        dataToExport = teacherSummary.details;
+        columns = getTeacherExportColumns();
+        title = `Teacher Assessment Report - ${teacherSummary.teacher ? `${teacherSummary.teacher.first_name} ${teacherSummary.teacher.last_name}` : "Selected Teacher"}`;
+        filename = `teacher-assessments-${new Date().toISOString().split("T")[0]}`;
+        subtitle = `Teacher: ${teacherSummary.teacher?.first_name} ${teacherSummary.teacher?.last_name} | Total Records: ${dataToExport.length} | Generated on ${new Date().toLocaleDateString()}`;
+        break;
+      default:
+        return;
+    }
+
+    if (dataToExport.length === 0) {
+      alert("No data to export for the current view");
+      return;
+    }
+
+    if (format === "csv") {
+      exportToCSV(dataToExport, columns, { filename });
+    } else {
+      await exportToPDF(dataToExport, columns, {
+        filename,
+        title,
+        subtitle,
+        orientation: "landscape",
+      });
+    }
+  }, [viewType, assessments, classSummary, subjectSummary, teacherSummary]);
+
+  const exportOptions = [
+    { value: "assessments", label: "Current View" },
+  ];
+
+  // ============================================
+  // END EXPORT FUNCTIONALITY
+  // ============================================
+
+  const getTypeColor = (type: string) => {
+    const typeObj = assessmentTypes.find(t => t.value === type);
+    return typeObj?.color || "#64748b";
+  };
+
+  const getScoreBadgeClass = (score: number | null | string) => {
+    const numericScore = typeof score === "string" ? parseFloat(score) : score;
+    if (!numericScore && numericScore !== 0) return styles.scoreNone;
+    if (numericScore >= 80) return styles.scoreExcellent;
+    if (numericScore >= 70) return styles.scoreGood;
+    if (numericScore >= 60) return styles.scoreAverage;
+    if (numericScore >= 50) return styles.scoreBelowAverage;
+    return styles.scorePoor;
+  };
+
+  const getLetterGradeClass = (grade: string | null) => {
+    if (!grade) return styles.gradeNone;
+    switch (grade) {
+      case "A": return styles.gradeA;
+      case "B": return styles.gradeB;
+      case "C": return styles.gradeC;
+      case "D": return styles.gradeD;
+      case "E": return styles.gradeE;
+      case "F": return styles.gradeF;
+      default: return styles.gradeNone;
+    }
+  };
+
+  const getTermDisplay = () => {
+    const term = terms.find(t => t.id === parseInt(selectedTermId));
+    const year = academicYears.find(y => y.id === parseInt(selectedAcademicYear));
+    if (term && year) {
+      return `${term.name} - ${year.year}`;
+    }
+    if (term) return term.name;
+    if (year) return `${year.year}`;
+    return "Current";
+  };
+
+  // Stats for overview
+  const overviewStats = useMemo(() => {
+    if (!overallStats) return [];
     return [
-      {
-        id: 1,
-        label: 'Total Assessments',
-        value: totalAssessments,
-        secondaryValue: published,
-        secondaryLabel: 'Published',
-        trend: { value: 12, label: 'this term' },
-        color: 'blue',
-        type: 'classes'
-      },
-      {
-        id: 2,
-        label: 'Upcoming',
-        value: upcoming,
-        secondaryValue: unpublished,
-        secondaryLabel: 'Draft',
-        trend: { value: 5, label: 'this week' },
-        color: 'orange',
-        type: 'events'
-      },
-      {
-        id: 3,
-        label: 'Tests & Quizzes',
-        value: tests,
-        secondaryValue: assignments,
-        secondaryLabel: 'Assignments',
-        trend: { value: 3, label: 'vs last term' },
-        color: 'purple',
-        type: 'classes'
-      },
-      {
-        id: 4,
-        label: 'Avg. Weight',
-        value: `${avgWeight}%`,
-        secondaryValue: exams,
-        secondaryLabel: 'Major Exams',
-        trend: { value: 2, label: 'balanced' },
-        color: 'green',
-        type: 'attendance'
-      }
+      { id: 1, label: "Total Assessments", value: overallStats.totalAssessments, color: "blue", type: "assessments" },
+      { id: 2, label: "Students Assessed", value: overallStats.totalStudents, color: "green", type: "students" },
+      { id: 3, label: "Teachers", value: overallStats.totalTeachers, color: "purple", type: "teachers" },
+      { id: 4, label: "Overall Average", value: `${overallStats.overallAverage}%`, color: "orange", type: "average" },
     ];
-  }, [assessments]);
+  }, [overallStats]);
 
-  // Table columns configuration
-  const columns = [
+  // Table columns for assessments
+  const assessmentColumns = [
     {
-      header: 'Assessment ID',
-      accessor: 'id',
+      header: "Student",
+      accessor: "student",
       sortable: true,
-      width: '120px',
-      render: (row: Assessment) => (
-        <span className={styles.assessmentId}>{row.id}</span>
-      )
-    },
-    {
-      header: 'Title',
-      accessor: 'title',
-      sortable: true,
-      render: (row: Assessment) => (
-        <div className={styles.titleCell}>
-          <div className={styles.typeIcon}>
-            {row.type === 'Test' && '📝'}
-            {row.type === 'Assignment' && '📋'}
-            {row.type === 'Quiz' && '❓'}
-            {row.type === 'Midterm' && '📚'}
-            {row.type === 'Exam' && '📖'}
-            {row.type === 'Practical' && '🔬'}
+      render: (row: any) => (
+        <div className={styles.studentCell}>
+          <div className={styles.studentAvatar}>
+            {row.student?.first_name?.[0]}{row.student?.last_name?.[0]}
           </div>
           <div>
-            <div className={styles.assessmentTitle}>{row.title}</div>
-            <div className={styles.assessmentCourse}>{row.course.name}</div>
+            <div className={styles.studentName}>
+              {row.student?.first_name} {row.student?.last_name}
+            </div>
+            <div className={styles.studentId}>{row.student?.admission_number || row.student?.student_number || "—"}</div>
           </div>
         </div>
-      )
+      ),
     },
     {
-      header: 'Type',
-      accessor: 'type',
+      header: "Class",
+      accessor: "class",
       sortable: true,
-      width: '120px',
-      render: (row: Assessment) => {
-        const typeColors: Record<string, string> = {
-          Assignment: styles.typeAssignment,
-          Test: styles.typeTest,
-          Quiz: styles.typeQuiz,
-          Midterm: styles.typeMidterm,
-          Exam: styles.typeExam,
-          Practical: styles.typePractical
-        };
+      render: (row: any) => row.class?.name || "—",
+    },
+    {
+      header: "Subject",
+      accessor: "subject",
+      sortable: true,
+      render: (row: any) => row.subject?.title || "—",
+    },
+    {
+      header: "Assessment Type",
+      accessor: "assessment_type",
+      sortable: true,
+      width: "140px",
+      render: (row: any) => {
+        const type = assessmentTypes.find(t => t.value === row.assessment_type);
         return (
-          <span className={`${styles.typeBadge} ${typeColors[row.type]}`}>
-            {row.type}
+          <span
+            className={styles.typeBadge}
+            style={{ background: `${getTypeColor(row.assessment_type)}20`, color: getTypeColor(row.assessment_type) }}
+          >
+            {type?.label || row.assessment_type}
           </span>
         );
-      }
+      },
     },
     {
-      header: 'Class',
-      accessor: 'class.name',
+      header: "Score",
+      accessor: "numeric_score",
       sortable: true,
-      width: '120px'
+      width: "80px",
+      render: (row: any) => (
+        row.numeric_score ? (
+          <span className={`${styles.scoreBadge} ${getScoreBadgeClass(row.numeric_score)}`}>
+            {row.numeric_score}%
+          </span>
+        ) : (
+          <span className={styles.noScore}>—</span>
+        )
+      ),
     },
     {
-      header: 'Teacher',
-      accessor: 'teacher.fullName',
+      header: "Grade",
+      accessor: "letter_grade",
       sortable: true,
-      width: '150px',
-      render: (row: Assessment) => (
-        <div className={styles.teacherCell}>
-          <div className={styles.teacherAvatar}>
-            {row.teacher.fullName.split(' ').map(n => n[0]).join('')}
+      width: "70px",
+      render: (row: any) => (
+        row.letter_grade ? (
+          <span className={`${styles.gradeBadge} ${getLetterGradeClass(row.letter_grade)}`}>
+            {row.letter_grade}
+          </span>
+        ) : (
+          <span className={styles.noScore}>—</span>
+        )
+      ),
+    },
+    {
+      header: "Teacher",
+      accessor: "teacher",
+      sortable: true,
+      render: (row: any) => row.teacher ? `${row.teacher.first_name} ${row.teacher.last_name}` : "—",
+    },
+    {
+      header: "Date",
+      accessor: "created_at",
+      sortable: true,
+      width: "120px",
+      render: (row: any) => new Date(row.created_at).toLocaleDateString(),
+    },
+  ];
+
+  // Class summary table columns
+  const classStudentColumns = [
+    {
+      header: "Student",
+      accessor: "student",
+      sortable: true,
+      render: (row: any) => (
+        <div className={styles.studentCell}>
+          <div className={styles.studentAvatar}>
+            {row.student.first_name?.[0]}{row.student.last_name?.[0]}
           </div>
-          <span>{row.teacher.fullName}</span>
+          <div>
+            <div className={styles.studentName}>{row.student.name || `${row.student.first_name} ${row.student.last_name}`}</div>
+            <div className={styles.studentId}>{row.student.admission_number || row.student.student_number || "—"}</div>
+          </div>
         </div>
-      )
+      ),
     },
     {
-      header: 'Score / Weight',
-      accessor: 'maxScore',
-      sortable: true,
-      width: '130px',
-      render: (row: Assessment) => (
-        <div className={styles.scoreCell}>
-          <span className={styles.maxScore}>{row.maxScore} pts</span>
-          <span className={styles.weight}>{row.weight}% weight</span>
-        </div>
-      )
-    },
-    {
-      header: 'Due Date',
-      accessor: 'dueDate',
-      sortable: true,
-      width: '110px',
-      render: (row: Assessment) => {
-        const isOverdue = new Date(row.dueDate) < new Date() && row.published;
-        return (
-          <div className={styles.dateCell}>
-            <span className={isOverdue ? styles.overdue : styles.dateText}>
-              {row.dueDate}
+      header: "Performance",
+      accessor: "assessments.performance",
+      width: "100px",
+      render: (row: any) => (
+        row.assessments.performance?.score ? (
+          <div>
+            <span className={`${styles.scoreBadge} ${getScoreBadgeClass(row.assessments.performance.score)}`}>
+              {row.assessments.performance.score}%
             </span>
-            {isOverdue && <span className={styles.overdueLabel}>Overdue</span>}
-          </div>
-        );
-      }
-    },
-    {
-      header: 'Status',
-      accessor: 'published',
-      sortable: true,
-      width: '100px',
-      render: (row: Assessment) => (
-        <span className={`${styles.statusBadge} ${row.published ? styles.statusPublished : styles.statusDraft}`}>
-          {row.published ? 'Published' : 'Draft'}
-        </span>
-      )
-    }
-  ];
-
-  // Filter options
-  const filterOptions = [
-    {
-      label: 'Type',
-      value: 'type',
-      key: 'type',
-      type: 'select' as const,
-      options: [
-        { label: 'Assignment', value: 'Assignment' },
-        { label: 'Test', value: 'Test' },
-        { label: 'Quiz', value: 'Quiz' },
-        { label: 'Midterm', value: 'Midterm' },
-        { label: 'Exam', value: 'Exam' },
-        { label: 'Practical', value: 'Practical' }
-      ]
-    },
-    {
-      label: 'Term',
-      value: 'term',
-      key: 'term',
-      type: 'select' as const,
-      options: [
-        { label: 'First Term', value: 'First Term' },
-        { label: 'Second Term', value: 'Second Term' },
-        { label: 'Third Term', value: 'Third Term' }
-      ]
-    },
-    {
-      label: 'Status',
-      value: 'published',
-      key: 'published',
-      type: 'select' as const,
-      options: [
-        { label: 'Published', value: true },
-        { label: 'Draft', value: false }
-      ]
-    },
-    {
-      label: 'Class',
-      value: 'class.name',
-      key: 'class.name',
-      type: 'select' as const,
-      options: [
-        { label: 'Science 1', value: 'Science 1' },
-        { label: 'Science 2', value: 'Science 2' },
-        { label: 'Business 1', value: 'Business 1' }
-      ]
-    }
-  ];
-
-  const sortOptions = [
-    { label: 'Title (A-Z)', value: 'title-asc', key: 'title', order: 'asc' as const },
-    { label: 'Title (Z-A)', value: 'title-desc', key: 'title', order: 'desc' as const },
-    { label: 'Due Date (Nearest)', value: 'due-asc', key: 'dueDate', order: 'asc' as const },
-    { label: 'Due Date (Farthest)', value: 'due-desc', key: 'dueDate', order: 'desc' as const },
-    { label: 'Created (Newest)', value: 'created-desc', key: 'createdAt', order: 'desc' as const },
-    { label: 'Created (Oldest)', value: 'created-asc', key: 'createdAt', order: 'asc' as const },
-    { label: 'Weight (Highest)', value: 'weight-desc', key: 'weight', order: 'desc' as const },
-    { label: 'Weight (Lowest)', value: 'weight-asc', key: 'weight', order: 'asc' as const }
-  ];
-
-  // CRUD Operations
-  const handleCreate = () => {
-    setModalMode('create');
-    setFormData({
-      title: '',
-      type: 'Test',
-      course: {
-        id: '',
-        name: '',
-        code: ''
-      },
-      class: {
-        id: '',
-        name: ''
-      },
-      teacher: {
-        id: '',
-        fullName: ''
-      },
-      academicYear: '2025/2026',
-      term: 'First Term',
-      maxScore: 100,
-      weight: 10,
-      dateGiven: '',
-      dueDate: '',
-      published: false
-    });
-    setShowModal(true);
-  };
-
-  const handleEdit = (assessment: Assessment) => {
-    setModalMode('edit');
-    setCurrentAssessment(assessment);
-    setFormData(assessment);
-    setShowModal(true);
-  };
-
-  const handleView = (assessment: Assessment) => {
-    setModalMode('view');
-    setCurrentAssessment(assessment);
-    setFormData(assessment);
-    setShowModal(true);
-  };
-
-  const handleDelete = (assessmentId: string) => {
-    setAssessmentToDelete(assessmentId);
-    setShowDeleteConfirm(true);
-  };
-
-  const confirmDelete = () => {
-    if (assessmentToDelete) {
-      setAssessments(assessments.filter(a => a.id !== assessmentToDelete));
-      setFilteredAssessments(filteredAssessments.filter(a => a.id !== assessmentToDelete));
-      setShowDeleteConfirm(false);
-      setAssessmentToDelete(null);
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (modalMode === 'create') {
-      const newAssessment: Assessment = {
-        id: `ASM-${Date.now()}`,
-        ...formData,
-        createdAt: new Date().toISOString().split('T')[0]
-      } as Assessment;
-      setAssessments([...assessments, newAssessment]);
-      setFilteredAssessments([...filteredAssessments, newAssessment]);
-    } else if (modalMode === 'edit' && currentAssessment) {
-      const updatedAssessments = assessments.map(a => 
-        a.id === currentAssessment.id ? { ...a, ...formData } : a
-      );
-      setAssessments(updatedAssessments);
-      setFilteredAssessments(updatedAssessments);
-    }
-    
-    setShowModal(false);
-    setCurrentAssessment(null);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    const checked = (e.target as HTMLInputElement).checked;
-    
-    // Handle nested fields
-    if (name.includes('.')) {
-      const [parent, child] = name.split('.');
-      setFormData(prev => ({
-        ...prev,
-        [parent]: {
-          ...(prev[parent as keyof Assessment] as any),
-          [child]: value
-        }
-      }));
-    } else {
-      setFormData(prev => ({ 
-        ...prev, 
-        [name]: type === 'checkbox' ? checked : type === 'number' ? Number(value) : value 
-      }));
-    }
-  };
-
-  // Quick publish toggle
-  const handlePublishToggle = (assessmentId: string) => {
-    const updatedAssessments = assessments.map(a => 
-      a.id === assessmentId ? { ...a, published: !a.published } : a
-    );
-    setAssessments(updatedAssessments);
-    setFilteredAssessments(updatedAssessments);
-  };
-
-  // Table actions
-  const actions = [
-    {
-      label: 'View',
-      variant: 'primary',
-      onClick: (row: Assessment) => handleView(row),
-      icon: (
-        <svg viewBox="0 0 24 24" width="16" height="16">
-          <path fill="currentColor" d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />
-        </svg>
-      )
-    },
-    {
-      label: 'Edit',
-      variant: 'secondary',
-      onClick: (row: Assessment) => handleEdit(row),
-      icon: (
-        <svg viewBox="0 0 24 24" width="16" height="16">
-          <path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
-        </svg>
-      )
-    },
-    {
-      label: 'Publish',
-      variant: 'success',
-      onClick: (row: Assessment) => handlePublishToggle(row.id),
-      hidden: (row: Assessment) => row.published,
-      icon: (
-        <svg viewBox="0 0 24 24" width="16" height="16">
-          <path fill="currentColor" d="M5,4V7H10.5V19H13.5V7H19V4H5Z" />
-        </svg>
-      )
-    },
-    {
-      label: 'Unpublish',
-      variant: 'warning',
-      onClick: (row: Assessment) => handlePublishToggle(row.id),
-      hidden: (row: Assessment) => !row.published,
-      icon: (
-        <svg viewBox="0 0 24 24" width="16" height="16">
-          <path fill="currentColor" d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M14.59,8L12,10.59L9.41,8L8,9.41L10.59,12L8,14.59L9.41,16L12,13.41L14.59,16L16,14.59L13.41,12L16,9.41L14.59,8Z" />
-        </svg>
-      )
-    },
-    {
-      label: 'Delete',
-      variant: 'danger',
-      onClick: (row: Assessment) => handleDelete(row.id),
-      icon: (
-        <svg viewBox="0 0 24 24" width="16" height="16">
-          <path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
-        </svg>
-      )
-    }
-  ];
-
-  // Render expanded row
-  const renderExpandedRow = (row: Assessment) => {
-    const daysUntilDue = Math.ceil((new Date(row.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
-    const isOverdue = daysUntilDue < 0;
-
-    return (
-      <div className={styles.expandedContent}>
-        <div className={styles.expandedSection}>
-          <h4>Course Information</h4>
-          <div className={styles.infoGrid}>
-            <div className={styles.infoItem}>
-              <span className={styles.infoLabel}>Course Name:</span>
-              <span className={styles.infoValue}>{row.course.name}</span>
-            </div>
-            <div className={styles.infoItem}>
-              <span className={styles.infoLabel}>Course Code:</span>
-              <span className={styles.infoValue}>{row.course.code}</span>
-            </div>
-            <div className={styles.infoItem}>
-              <span className={styles.infoLabel}>Class:</span>
-              <span className={styles.infoValue}>{row.class.name}</span>
-            </div>
-            <div className={styles.infoItem}>
-              <span className={styles.infoLabel}>Teacher:</span>
-              <span className={styles.infoValue}>{row.teacher.fullName}</span>
-            </div>
-          </div>
-        </div>
-        
-        <div className={styles.expandedSection}>
-          <h4>Academic Details</h4>
-          <div className={styles.infoGrid}>
-            <div className={styles.infoItem}>
-              <span className={styles.infoLabel}>Academic Year:</span>
-              <span className={styles.infoValue}>{row.academicYear}</span>
-            </div>
-            <div className={styles.infoItem}>
-              <span className={styles.infoLabel}>Term:</span>
-              <span className={styles.infoValue}>{row.term}</span>
-            </div>
-            <div className={styles.infoItem}>
-              <span className={styles.infoLabel}>Date Given:</span>
-              <span className={styles.infoValue}>{row.dateGiven}</span>
-            </div>
-            <div className={styles.infoItem}>
-              <span className={styles.infoLabel}>Created:</span>
-              <span className={styles.infoValue}>{row.createdAt}</span>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.expandedSection}>
-          <h4>Grading Information</h4>
-          <div className={styles.gradingCards}>
-            <div className={styles.gradingCard}>
-              <span className={styles.cardLabel}>Maximum Score</span>
-              <span className={styles.cardValue}>{row.maxScore}</span>
-              <span className={styles.cardUnit}>points</span>
-            </div>
-            <div className={styles.gradingCard}>
-              <span className={styles.cardLabel}>Grade Weight</span>
-              <span className={styles.cardValue}>{row.weight}</span>
-              <span className={styles.cardUnit}>percent</span>
-            </div>
-            <div className={styles.gradingCard}>
-              <span className={styles.cardLabel}>Due Status</span>
-              <span className={`${styles.cardValue} ${isOverdue ? styles.cardOverdue : styles.cardActive}`}>
-                {isOverdue ? 'Overdue' : daysUntilDue === 0 ? 'Today' : `${daysUntilDue} days`}
+            {row.assessments.performance.grade && (
+              <span className={`${styles.gradeSmall} ${getLetterGradeClass(row.assessments.performance.grade)}`}>
+                {row.assessments.performance.grade}
               </span>
-              <span className={styles.cardUnit}>{isOverdue ? '' : 'remaining'}</span>
-            </div>
+            )}
           </div>
-        </div>
-      </div>
-    );
-  };
+        ) : <span className={styles.noScore}>—</span>
+      ),
+    },
+    {
+      header: "Attitude",
+      accessor: "assessments.attitude",
+      width: "100px",
+      render: (row: any) => (
+        row.assessments.attitude?.score ? (
+          <div>
+            <span className={`${styles.scoreBadge} ${getScoreBadgeClass(row.assessments.attitude.score)}`}>
+              {row.assessments.attitude.score}%
+            </span>
+            {row.assessments.attitude.grade && (
+              <span className={`${styles.gradeSmall} ${getLetterGradeClass(row.assessments.attitude.grade)}`}>
+                {row.assessments.attitude.grade}
+              </span>
+            )}
+          </div>
+        ) : <span className={styles.noScore}>—</span>
+      ),
+    },
+    {
+      header: "Behavior",
+      accessor: "assessments.behavior",
+      width: "100px",
+      render: (row: any) => (
+        row.assessments.behavior?.score ? (
+          <div>
+            <span className={`${styles.scoreBadge} ${getScoreBadgeClass(row.assessments.behavior.score)}`}>
+              {row.assessments.behavior.score}%
+            </span>
+            {row.assessments.behavior.grade && (
+              <span className={`${styles.gradeSmall} ${getLetterGradeClass(row.assessments.behavior.grade)}`}>
+                {row.assessments.behavior.grade}
+              </span>
+            )}
+          </div>
+        ) : <span className={styles.noScore}>—</span>
+      ),
+    },
+    {
+      header: "Participation",
+      accessor: "assessments.participation",
+      width: "100px",
+      render: (row: any) => (
+        row.assessments.participation?.score ? (
+          <div>
+            <span className={`${styles.scoreBadge} ${getScoreBadgeClass(row.assessments.participation.score)}`}>
+              {row.assessments.participation.score}%
+            </span>
+            {row.assessments.participation.grade && (
+              <span className={`${styles.gradeSmall} ${getLetterGradeClass(row.assessments.participation.grade)}`}>
+                {row.assessments.participation.grade}
+              </span>
+            )}
+          </div>
+        ) : <span className={styles.noScore}>—</span>
+      ),
+    },
+    {
+      header: "Average",
+      accessor: "averageScore",
+      width: "100px",
+      render: (row: any) => (
+        row.averageScore ? (
+          <span className={`${styles.scoreBadge} ${getScoreBadgeClass(row.averageScore)}`}>
+            {row.averageScore}%
+          </span>
+        ) : <span className={styles.noScore}>—</span>
+      ),
+    },
+  ];
 
   return (
     <div className={styles.pageContainer}>
-      <Header 
+      <Header
         title="Assessment Management"
-        subtitle="Manage tests, assignments, quizzes, and exams"
-        customActions={
-          <button className={styles.addButton} onClick={handleCreate}>
-            <svg viewBox="0 0 24 24" width="20" height="20">
-              <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
-            </svg>
-            Create Assessment
-          </button>
-        }
+        subtitle="View student assessments, performance, attitude, behavior, and participation"
+        onExport={handleExport}
+        exportOptions={exportOptions}
       />
 
       <div className={styles.contentWrapper}>
-        {/* Stats Section */}
-        <Stats 
-          stats={stats}
-          variant="cards"
-          columns={4}
-          showTrend={true}
-          showIcon={true}
-          size="md"
-        />
+        {/* View Tabs */}
+        <div className={styles.tabsContainer}>
+          <button
+            className={`${styles.tab} ${viewType === "overview" ? styles.activeTab : ""}`}
+            onClick={() => setViewType("overview")}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M3 13h8V3H3v10Zm0 8h8v-6H3v6Zm10 0h8V11h-8v10Zm0-18v6h8V3h-8Z" />
+            </svg>
+            Overview
+          </button>
+          <button
+            className={`${styles.tab} ${viewType === "byClass" ? styles.activeTab : ""}`}
+            onClick={() => setViewType("byClass")}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+            </svg>
+            By Class
+          </button>
+          <button
+            className={`${styles.tab} ${viewType === "bySubject" ? styles.activeTab : ""}`}
+            onClick={() => setViewType("bySubject")}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z" />
+            </svg>
+            By Subject
+          </button>
+          <button
+            className={`${styles.tab} ${viewType === "byTeacher" ? styles.activeTab : ""}`}
+            onClick={() => setViewType("byTeacher")}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+            </svg>
+            By Teacher
+          </button>
+        </div>
 
-        {/* Filter Section */}
+        {/* Filters */}
         <div className={styles.filterSection}>
-          <StatFilter
-            data={assessments}
-            onFilterChange={setFilteredAssessments}
-            searchKeys={['title', 'id', 'course.name', 'course.code', 'class.name', 'teacher.fullName']}
-            sortOptions={sortOptions}
-            filterOptions={filterOptions}
-            variant="default"
-            showSearch={true}
-            showSort={true}
-            showFilter={true}
-            searchPlaceholder="Search by title, course, class, or teacher..."
-            enableReset={true}
-          />
-        </div>
+          <div className={styles.filterRow}>
+            {viewType === "byClass" && (
+              <div className={styles.filterGroup}>
+                <label>Class *</label>
+                <select
+                  value={selectedClass}
+                  onChange={(e) => setSelectedClass(e.target.value)}
+                >
+                  <option value="">Select Class</option>
+                  {classes.map((cls) => (
+                    <option key={cls.id} value={cls.id}>
+                      {cls.name} {cls.section ? `- ${cls.section}` : ""} ({cls.level})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
-        {/* Table Section */}
-        <div className={styles.tableSection}>
-          <Table
-            columns={columns}
-            data={filteredAssessments}
-            variant="default"
-            size="md"
-            stickyHeader={true}
-            sortable={true}
-            pagination={true}
-            pageSize={10}
-            // actions={actions}
-            expandable={true}
-            renderExpandedRow={renderExpandedRow}
-            showRowNumbers={true}
-            emptyMessage="No assessments found"
-            loading={false}
-          />
-        </div>
-      </div>
+            {viewType === "bySubject" && (
+              <div className={styles.filterGroup}>
+                <label>Subject *</label>
+                <select
+                  value={selectedSubject}
+                  onChange={(e) => setSelectedSubject(e.target.value)}
+                >
+                  <option value="">Select Subject</option>
+                  {subjects.map((subject) => (
+                    <option key={subject.id} value={subject.id}>
+                      {subject.title} ({subject.subject_code})
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
 
-      {/* Create/Edit Modal */}
-      {showModal && (
-        <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.modalHeader}>
-              <h2>
-                {modalMode === 'create' && 'Create Assessment'}
-                {modalMode === 'edit' && 'Edit Assessment'}
-                {modalMode === 'view' && 'Assessment Details'}
-              </h2>
-              <button className={styles.closeButton} onClick={() => setShowModal(false)}>
-                <svg viewBox="0 0 24 24" width="24" height="24">
-                  <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
-                </svg>
-              </button>
+            {viewType === "byTeacher" && (
+              <div className={styles.filterGroup}>
+                <label>Teacher *</label>
+                <select
+                  value={selectedTeacher}
+                  onChange={(e) => setSelectedTeacher(e.target.value)}
+                >
+                  <option value="">Select Teacher</option>
+                  {teachers.map((teacher) => (
+                    <option key={teacher.id} value={teacher.id}>
+                      {teacher.first_name} {teacher.last_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            <div className={styles.filterGroup}>
+              <label>Academic Year</label>
+              <select
+                value={selectedAcademicYear}
+                onChange={(e) => setSelectedAcademicYear(e.target.value)}
+              >
+                <option value="">All Years</option>
+                {academicYears.map((year) => (
+                  <option key={year.id} value={year.id}>
+                    {year.year} - {year.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            <form onSubmit={handleSubmit} className={styles.modalBody}>
-              <div className={styles.formGrid}>
-                {/* Basic Information */}
-                <div className={styles.formSection}>
-                  <h3 className={styles.sectionTitle}>Basic Information</h3>
-                  
-                  <div className={styles.formGroup}>
-                    <label>Assessment Title *</label>
-                    <input
-                      type="text"
-                      name="title"
-                      value={formData.title}
-                      onChange={handleInputChange}
-                      required
-                      disabled={modalMode === 'view'}
-                      placeholder="Test 1, Assignment 2, Final Exam..."
-                    />
-                  </div>
+            <div className={styles.filterGroup}>
+              <label>Term</label>
+              <select
+                value={selectedTermId}
+                onChange={(e) => setSelectedTermId(e.target.value)}
+                disabled={!selectedAcademicYear}
+              >
+                <option value="">All Terms</option>
+                {terms.map((term) => (
+                  <option key={term.id} value={term.id}>
+                    {term.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-                  <div className={styles.formRow}>
-                    <div className={styles.formGroup}>
-                      <label>Type *</label>
-                      <select
-                        name="type"
-                        value={formData.type}
-                        onChange={handleInputChange}
-                        required
-                        disabled={modalMode === 'view'}
-                      >
-                        <option value="Assignment">Assignment</option>
-                        <option value="Test">Test</option>
-                        <option value="Quiz">Quiz</option>
-                        <option value="Midterm">Midterm</option>
-                        <option value="Exam">Exam</option>
-                        <option value="Practical">Practical</option>
-                      </select>
+            {(viewType === "overview") && (
+              <div className={styles.filterGroup}>
+                <label>Assessment Type</label>
+                <select
+                  value={selectedAssessmentType}
+                  onChange={(e) => setSelectedAssessmentType(e.target.value)}
+                >
+                  <option value="">All Types</option>
+                  {assessmentTypes.map((type) => (
+                    <option key={type.value} value={type.value}>
+                      {type.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+
+          {/* Active filters display */}
+          {(selectedAcademicYear || selectedTermId) && (
+            <div className={styles.activeFilters}>
+              <span className={styles.activeFiltersLabel}>Active Filters:</span>
+              {selectedAcademicYear && (
+                <span className={styles.filterTag}>
+                  {academicYears.find(y => y.id === parseInt(selectedAcademicYear))?.year} Year
+                </span>
+              )}
+              {selectedTermId && (
+                <span className={styles.filterTag}>
+                  {terms.find(t => t.id === parseInt(selectedTermId))?.name}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Overview View */}
+        {viewType === "overview" && overallStats && (
+          <>
+            <Stats stats={overviewStats} variant="cards" columns={4} showIcon={true} size="md" />
+
+            {/* Type Averages */}
+            <div className={styles.typeAveragesSection}>
+              <h3 className={styles.sectionTitle}>Average Scores by Type</h3>
+              <div className={styles.typeAveragesGrid}>
+                {assessmentTypes.map((type) => (
+                  <div key={type.value} className={styles.typeCard}>
+                    <div className={styles.typeHeader} style={{ color: type.color }}>
+                      <span className={styles.typeIcon}>
+                        {type.value === "performance" && "📊"}
+                        {type.value === "attitude" && "😊"}
+                        {type.value === "behavior" && "⭐"}
+                        {type.value === "participation" && "🙋"}
+                      </span>
+                      <span className={styles.typeLabel}>{type.label}</span>
                     </div>
-
-                    <div className={styles.formGroup}>
-                      <label>Term *</label>
-                      <select
-                        name="term"
-                        value={formData.term}
-                        onChange={handleInputChange}
-                        required
-                        disabled={modalMode === 'view'}
-                      >
-                        <option value="First Term">First Term</option>
-                        <option value="Second Term">Second Term</option>
-                        <option value="Third Term">Third Term</option>
-                      </select>
+                    <div className={styles.typeScore}>
+                      {overallStats.typeAverages?.[type.value] || "N/A"}%
                     </div>
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label>Academic Year *</label>
-                    <select
-                      name="academicYear"
-                      value={formData.academicYear}
-                      onChange={handleInputChange}
-                      required
-                      disabled={modalMode === 'view'}
-                    >
-                      <option value="2025/2026">2025/2026</option>
-                      <option value="2024/2025">2024/2025</option>
-                      <option value="2023/2024">2023/2024</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Course & Class Information */}
-                <div className={styles.formSection}>
-                  <h3 className={styles.sectionTitle}>Course & Class</h3>
-                  
-                  <div className={styles.formRow}>
-                    <div className={styles.formGroup}>
-                      <label>Course Name *</label>
-                      <input
-                        type="text"
-                        name="course.name"
-                        value={formData.course?.name}
-                        onChange={handleInputChange}
-                        required
-                        disabled={modalMode === 'view'}
-                        placeholder="Mathematics"
-                      />
-                    </div>
-
-                    <div className={styles.formGroup}>
-                      <label>Course Code *</label>
-                      <input
-                        type="text"
-                        name="course.code"
-                        value={formData.course?.code}
-                        onChange={handleInputChange}
-                        required
-                        disabled={modalMode === 'view'}
-                        placeholder="MATH101"
-                      />
+                    <div className={styles.typeCount}>
+                      {overallStats.typeCounts?.[type.value] || 0} assessments
                     </div>
                   </div>
+                ))}
+              </div>
+            </div>
 
-                  <div className={styles.formRow}>
-                    <div className={styles.formGroup}>
-                      <label>Class *</label>
-                      <select
-                        name="class.name"
-                        value={formData.class?.name}
-                        onChange={handleInputChange}
-                        required
-                        disabled={modalMode === 'view'}
-                      >
-                        <option value="">Select Class</option>
-                        <option value="Science 1">Science 1</option>
-                        <option value="Science 2">Science 2</option>
-                        <option value="Business 1">Business 1</option>
-                        <option value="Business 2">Business 2</option>
-                      </select>
-                    </div>
+            {/* Recent Assessments Table */}
+            <div className={styles.tableSection}>
+              <h3 className={styles.sectionTitle}>Recent Assessments</h3>
+              <Table
+                columns={assessmentColumns}
+                data={assessments}
+                variant="default"
+                size="md"
+                stickyHeader={true}
+                sortable={true}
+                pagination={true}
+                pageSize={10}
+                showRowNumbers={true}
+                emptyMessage="No assessments found"
+                loading={loading}
+              />
+            </div>
+          </>
+        )}
 
-                    <div className={styles.formGroup}>
-                      <label>Teacher Name *</label>
-                      <input
-                        type="text"
-                        name="teacher.fullName"
-                        value={formData.teacher?.fullName}
-                        onChange={handleInputChange}
-                        required
-                        disabled={modalMode === 'view'}
-                        placeholder="James Anderson"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Grading & Dates */}
-                <div className={styles.formSection}>
-                  <h3 className={styles.sectionTitle}>Grading & Schedule</h3>
-                  
-                  <div className={styles.formRow}>
-                    <div className={styles.formGroup}>
-                      <label>Maximum Score *</label>
-                      <input
-                        type="number"
-                        name="maxScore"
-                        value={formData.maxScore}
-                        onChange={handleInputChange}
-                        required
-                        min="1"
-                        disabled={modalMode === 'view'}
-                        placeholder="100"
-                      />
-                      <span className={styles.fieldHint}>Total points possible</span>
-                    </div>
-
-                    <div className={styles.formGroup}>
-                      <label>Weight (%) *</label>
-                      <input
-                        type="number"
-                        name="weight"
-                        value={formData.weight}
-                        onChange={handleInputChange}
-                        required
-                        min="0"
-                        max="100"
-                        disabled={modalMode === 'view'}
-                        placeholder="10"
-                      />
-                      <span className={styles.fieldHint}>Contribution to final grade</span>
-                    </div>
-                  </div>
-
-                  <div className={styles.formRow}>
-                    <div className={styles.formGroup}>
-                      <label>Date Given *</label>
-                      <input
-                        type="date"
-                        name="dateGiven"
-                        value={formData.dateGiven}
-                        onChange={handleInputChange}
-                        required
-                        disabled={modalMode === 'view'}
-                      />
-                    </div>
-
-                    <div className={styles.formGroup}>
-                      <label>Due Date *</label>
-                      <input
-                        type="date"
-                        name="dueDate"
-                        value={formData.dueDate}
-                        onChange={handleInputChange}
-                        required
-                        disabled={modalMode === 'view'}
-                      />
-                    </div>
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label className={styles.checkboxLabel}>
-                      <input
-                        type="checkbox"
-                        name="published"
-                        checked={formData.published}
-                        onChange={handleInputChange}
-                        disabled={modalMode === 'view'}
-                      />
-                      <span>Publish assessment (visible to students)</span>
-                    </label>
-                  </div>
+        {/* By Class View */}
+        {viewType === "byClass" && classSummary && (
+          <>
+            <div className={styles.summarySection}>
+              <div className={styles.summaryCard}>
+                <div className={styles.summaryIcon}>🏫</div>
+                <div className={styles.summaryContent}>
+                  <span className={styles.summaryLabel}>Class</span>
+                  <span className={styles.summaryValue}>
+                    {classSummary.class?.name} {classSummary.class?.section ? `- ${classSummary.class.section}` : ""}
+                  </span>
+                  <span className={styles.summarySub}>{classSummary.class?.level}</span>
                 </div>
               </div>
 
-              {/* View Mode - Show All Data */}
-              {modalMode === 'view' && currentAssessment && (
-                <div className={styles.viewMode}>
-                  {renderExpandedRow(currentAssessment)}
+              <div className={styles.summaryCard}>
+                <div className={styles.summaryIcon}>📝</div>
+                <div className={styles.summaryContent}>
+                  <span className={styles.summaryLabel}>Total Assessments</span>
+                  <span className={styles.summaryValue}>{classSummary.summary?.totalAssessments || 0}</span>
+                  <span className={styles.summarySub}>Across all subjects</span>
                 </div>
-              )}
+              </div>
 
-              {modalMode !== 'view' && (
-                <div className={styles.modalFooter}>
-                  <button 
-                    type="button" 
-                    className={styles.cancelButton}
-                    onClick={() => setShowModal(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button type="submit" className={styles.submitButton}>
-                    {modalMode === 'create' ? 'Create Assessment' : 'Update Assessment'}
-                  </button>
+              <div className={styles.summaryCard}>
+                <div className={styles.summaryIcon}>👨‍🎓</div>
+                <div className={styles.summaryContent}>
+                  <span className={styles.summaryLabel}>Students</span>
+                  <span className={styles.summaryValue}>{classSummary.summary?.totalStudents || 0}</span>
+                  <span className={styles.summarySub}>
+                    {classSummary.summary?.studentsWithAssessments || 0} assessed
+                  </span>
                 </div>
-              )}
-            </form>
-          </div>
-        </div>
-      )}
+              </div>
 
-      {/* Delete Confirmation Modal */}
-      {showDeleteConfirm && (
-        <div className={styles.modalOverlay} onClick={() => setShowDeleteConfirm(false)}>
-          <div className={styles.confirmModal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.confirmIcon}>
-              <svg viewBox="0 0 24 24" width="48" height="48">
-                <path fill="currentColor" d="M13,14H11V10H13M13,18H11V16H13M1,21H23L12,2L1,21Z" />
-              </svg>
+              <div className={styles.summaryCard}>
+                <div className={styles.summaryIcon}>📊</div>
+                <div className={styles.summaryContent}>
+                  <span className={styles.summaryLabel}>Class Average</span>
+                  <span className={styles.summaryValue}>{classSummary.summary?.classAverage || "N/A"}%</span>
+                </div>
+              </div>
             </div>
-            <h3>Delete Assessment</h3>
-            <p>Are you sure you want to delete this assessment? This action cannot be undone and will affect all associated student records.</p>
-            <div className={styles.confirmActions}>
-              <button 
-                className={styles.cancelButton}
-                onClick={() => setShowDeleteConfirm(false)}
-              >
-                Cancel
-              </button>
-              <button 
-                className={styles.deleteButton}
-                onClick={confirmDelete}
-              >
-                Delete
-              </button>
+
+            <div className={styles.tableSection}>
+              <h3 className={styles.sectionTitle}>Student Assessment Summary</h3>
+              <Table
+                columns={classStudentColumns}
+                data={classSummary.students || []}
+                variant="default"
+                size="md"
+                stickyHeader={true}
+                sortable={true}
+                pagination={true}
+                pageSize={10}
+                showRowNumbers={true}
+                emptyMessage="No students found"
+                loading={loading}
+              />
             </div>
+          </>
+        )}
+
+        {/* By Subject View */}
+        {viewType === "bySubject" && subjectSummary && (
+          <>
+            <div className={styles.summarySection}>
+              <div className={styles.summaryCard}>
+                <div className={styles.summaryIcon}>📘</div>
+                <div className={styles.summaryContent}>
+                  <span className={styles.summaryLabel}>Subject</span>
+                  <span className={styles.summaryValue}>{subjectSummary.subject?.title || "—"}</span>
+                  <span className={styles.summarySub}>{subjectSummary.subject?.subject_code}</span>
+                </div>
+              </div>
+
+              <div className={styles.summaryCard}>
+                <div className={styles.summaryIcon}>🏫</div>
+                <div className={styles.summaryContent}>
+                  <span className={styles.summaryLabel}>Classes</span>
+                  <span className={styles.summaryValue}>{subjectSummary.summary?.totalClasses || 0}</span>
+                </div>
+              </div>
+
+              <div className={styles.summaryCard}>
+                <div className={styles.summaryIcon}>📝</div>
+                <div className={styles.summaryContent}>
+                  <span className={styles.summaryLabel}>Assessments</span>
+                  <span className={styles.summaryValue}>{subjectSummary.summary?.totalAssessments || 0}</span>
+                </div>
+              </div>
+
+              <div className={styles.summaryCard}>
+                <div className={styles.summaryIcon}>📊</div>
+                <div className={styles.summaryContent}>
+                  <span className={styles.summaryLabel}>Overall Average</span>
+                  <span className={styles.summaryValue}>{subjectSummary.summary?.overallAverage || "N/A"}%</span>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.tableSection}>
+              <h3 className={styles.sectionTitle}>Class Performance</h3>
+              <table className={styles.simpleTable}>
+                <thead>
+                  <tr>
+                    <th>Class</th>
+                    <th>Students</th>
+                    <th>Assessments</th>
+                    <th>Average Score</th>
+                    <th>Performance</th>
+                    <th>Attitude</th>
+                    <th>Behavior</th>
+                    <th>Participation</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {subjectSummary.classes?.map((cls: any, index: number) => (
+                    <tr key={index}>
+                      <td className={styles.className}>{cls.class?.name || "—"}</td>
+                      <td>{cls.totalStudents || 0}</td>
+                      <td>{cls.totalAssessments || 0}</td>
+                      <td>
+                        <span className={`${styles.scoreBadge} ${getScoreBadgeClass(cls.averageScore)}`}>
+                          {cls.averageScore}%
+                        </span>
+                      </td>
+                      <td>{cls.typeCounts?.performance || 0}</td>
+                      <td>{cls.typeCounts?.attitude || 0}</td>
+                      <td>{cls.typeCounts?.behavior || 0}</td>
+                      <td>{cls.typeCounts?.participation || 0}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+
+        {/* By Teacher View */}
+        {viewType === "byTeacher" && teacherSummary && (
+          <>
+            <div className={styles.summarySection}>
+              <div className={styles.summaryCard}>
+                <div className={styles.summaryIcon}>👨‍🏫</div>
+                <div className={styles.summaryContent}>
+                  <span className={styles.summaryLabel}>Teacher</span>
+                  <span className={styles.summaryValue}>
+                    {teacherSummary.teacher?.first_name} {teacherSummary.teacher?.last_name}
+                  </span>
+                  <span className={styles.summarySub}>{teacherSummary.teacher?.email}</span>
+                </div>
+              </div>
+
+              <div className={styles.summaryCard}>
+                <div className={styles.summaryIcon}>📝</div>
+                <div className={styles.summaryContent}>
+                  <span className={styles.summaryLabel}>Assessments</span>
+                  <span className={styles.summaryValue}>{teacherSummary.summary?.totalAssessments || 0}</span>
+                </div>
+              </div>
+
+              <div className={styles.summaryCard}>
+                <div className={styles.summaryIcon}>👨‍🎓</div>
+                <div className={styles.summaryContent}>
+                  <span className={styles.summaryLabel}>Students</span>
+                  <span className={styles.summaryValue}>{teacherSummary.summary?.totalStudents || 0}</span>
+                </div>
+              </div>
+
+              <div className={styles.summaryCard}>
+                <div className={styles.summaryIcon}>📊</div>
+                <div className={styles.summaryContent}>
+                  <span className={styles.summaryLabel}>Average Score</span>
+                  <span className={styles.summaryValue}>{teacherSummary.summary?.overallAverage || "N/A"}%</span>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.tableSection}>
+              <h3 className={styles.sectionTitle}>Class & Subject Performance</h3>
+              <table className={styles.simpleTable}>
+                <thead>
+                  <tr>
+                    <th>Class</th>
+                    <th>Subject</th>
+                    <th>Students</th>
+                    <th>Assessments</th>
+                    <th>Average Score</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {teacherSummary.details?.map((detail: any, index: number) => (
+                    <tr key={index}>
+                      <td className={styles.className}>{detail.class?.name || "—"}</td>
+                      <td>{detail.subject?.title || "—"}</td>
+                      <td>{detail.totalStudents || 0}</td>
+                      <td>{detail.totalAssessments || 0}</td>
+                      <td>
+                        <span className={`${styles.scoreBadge} ${getScoreBadgeClass(detail.averageScore)}`}>
+                          {detail.averageScore}%
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+
+        {/* Empty States */}
+        {viewType === "byClass" && !selectedClass && !loading && (
+          <div className={styles.emptyState}>
+            <div className={styles.emptyIcon}>🏫</div>
+            <h3>Select a Class</h3>
+            <p>Please select a class from the filter above to view assessment summary.</p>
           </div>
-        </div>
-      )}
+        )}
+
+        {viewType === "bySubject" && !selectedSubject && !loading && (
+          <div className={styles.emptyState}>
+            <div className={styles.emptyIcon}>📘</div>
+            <h3>Select a Subject</h3>
+            <p>Please select a subject from the filter above to view assessment summary.</p>
+          </div>
+        )}
+
+        {viewType === "byTeacher" && !selectedTeacher && !loading && (
+          <div className={styles.emptyState}>
+            <div className={styles.emptyIcon}>👨‍🏫</div>
+            <h3>Select a Teacher</h3>
+            <p>Please select a teacher from the filter above to view assessment summary.</p>
+          </div>
+        )}
+
+        {/* Loading State */}
+        {loading && (
+          <div className={styles.loading}>
+            <div className={styles.spinner}></div>
+            <p>Loading assessment data...</p>
+          </div>
+        )}
+      </div>
     </div>
   );
-};
-
-export default AssessmentsAdminPage;
+}

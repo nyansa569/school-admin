@@ -1,7 +1,7 @@
 /* Page Container */
 .pageContainer {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
   padding-bottom: 2rem;
 }
 
@@ -17,7 +17,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f5c3f 0%, #d4a529 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -25,12 +25,12 @@
   font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(15, 92, 63, 0.3);
 }
 
 .addButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(15, 92, 63, 0.4);
 }
 
 .addButton svg {
@@ -66,7 +66,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f5c3f 0%, #d4a529 100%);
   color: white;
   display: flex;
   align-items: center;
@@ -100,8 +100,8 @@
 }
 
 .statusActive {
-  background: #d4f4dd;
-  color: #0e7c3a;
+  background: #d1fae5;
+  color: #0f5c3f;
 }
 
 .statusInactive {
@@ -110,8 +110,8 @@
 }
 
 .statusGraduated {
-  background: #bee3f8;
-  color: #2c5282;
+  background: #dbeafe;
+  color: #1e40af;
 }
 
 .statusSuspended {
@@ -174,7 +174,7 @@
   justify-content: space-between;
   padding: 1.5rem 2rem;
   border-bottom: 1px solid #e2e8f0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f5c3f 0%, #d4a529 100%);
   color: white;
 }
 
@@ -223,7 +223,7 @@
 .sectionTitle {
   font-size: 1.125rem;
   font-weight: 700;
-  color: #2d3748;
+  color: #0f5c3f;
   margin: 0 0 1rem 0;
   padding-bottom: 0.5rem;
   border-bottom: 2px solid #e2e8f0;
@@ -263,8 +263,8 @@
 .formGroup select:focus,
 .formGroup textarea:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #0f5c3f;
+  box-shadow: 0 0 0 3px rgba(15, 92, 63, 0.1);
 }
 
 .formGroup input:disabled,
@@ -316,14 +316,14 @@
 }
 
 .submitButton {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #0f5c3f 0%, #d4a529 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(15, 92, 63, 0.3);
 }
 
 .submitButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 6px 20px rgba(15, 92, 63, 0.4);
 }
 
 .deleteButton {
@@ -385,6 +385,96 @@
   justify-content: center;
 }
 
+/* Class Cell */
+.classCell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.className {
+  flex: 1;
+}
+
+.changeClassBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.changeClassBtn:hover {
+  background: #e2e8f0;
+}
+
+.largeModal {
+  max-width: 800px;
+}
+
+.historyTable {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.historyTable table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.historyTable th,
+.historyTable td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.historyTable th {
+  background: #f7fafc;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.removeBtn {
+  background: #fed7d7;
+  color: #c53030;
+  border: none;
+  padding: 0.375rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.removeBtn:hover {
+  background: #feb2b2;
+}
+
+.noData {
+  color: #718096;
+  text-align: center;
+  padding: 2rem;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  font-size: 1rem;
+  color: #718096;
+}
+
+.avatarImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .contentWrapper {
@@ -440,5 +530,411 @@
 
   .tableSection {
     box-shadow: none;
+  }
+}
+
+
+/* Add to page.module.css */
+
+/* Loading Container */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #11998e;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Student Cell */
+.studentCell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.studentAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.studentName {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 0.9375rem;
+}
+
+.studentEmail {
+  font-size: 0.75rem;
+  color: #718096;
+  margin-top: 2px;
+}
+
+/* Class Cell */
+.classCell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.className {
+  font-size: 0.875rem;
+  color: #4a5568;
+}
+
+.changeClassBtn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.changeClassBtn:hover {
+  background: #e2e8f0;
+}
+
+/* Status Badges */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.statusActive {
+  background: #d4f4dd;
+  color: #0e7c3a;
+}
+
+.statusInactive {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+.statusTransferred {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.statusGraduated {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.statusExpelled {
+  background: #fecaca;
+  color: #991b1b;
+}
+
+.statusWithdrawn {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.statusDeleted {
+  background: #e2e8f0;
+  color: #4a5568;
+}
+
+.currentBadge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: #11998e;
+  color: white;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* Form Divider */
+.formDivider {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0.5rem 0;
+  position: relative;
+}
+
+.formDivider::before,
+.formDivider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: calc(50% - 60px);
+  height: 1px;
+  background: #e2e8f0;
+}
+
+.formDivider::before {
+  left: 0;
+}
+
+.formDivider::after {
+  right: 0;
+}
+
+/* No Data */
+.noData {
+  text-align: center;
+  color: #94a3b8;
+  padding: 2rem;
+  font-size: 0.875rem;
+}
+
+/* History Table */
+.historyTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.813rem;
+}
+
+.historyTable th,
+.historyTable td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.historyTable th {
+  background: #f7fafc;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.historyTable td {
+  color: #2d3748;
+}
+
+.removeBtn {
+  background: none;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.removeBtn:hover {
+  background: #fef2f2;
+  border-color: #dc2626;
+}
+
+/* Profile Header for View Modal */
+.profileHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.profileAvatarLarge {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  font-weight: 600;
+  overflow: hidden;
+}
+
+.profileAvatarLarge img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profileInfo {
+  flex: 1;
+}
+
+.profileInfo h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 0.25rem 0;
+}
+
+.profileStudentId,
+.profileAdmissionNo {
+  font-size: 0.75rem;
+  color: #718096;
+  margin: 0;
+}
+
+.profileStatus {
+  flex-shrink: 0;
+}
+
+/* Info Grid for View Modal */
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.infoCard {
+  background: #f7fafc;
+  border-radius: 12px;
+  padding: 1rem;
+}
+
+.infoCard h4 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #4a5568;
+  margin: 0 0 0.75rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.infoCardFull {
+  background: #f7fafc;
+  border-radius: 12px;
+  padding: 1rem;
+  grid-column: span 2;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.5rem 0;
+  font-size: 0.813rem;
+}
+
+.infoRow:not(:last-child) {
+  border-bottom: 1px solid #edf2f7;
+}
+
+.infoRow span {
+  color: #718096;
+  font-weight: 500;
+}
+
+.infoRow strong {
+  color: #2d3748;
+  font-weight: 600;
+  text-align: right;
+  flex: 1;
+  margin-left: 1rem;
+}
+
+/* View Modal */
+.viewModal {
+  background: white;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+.viewModalBody {
+  padding: 2rem;
+  overflow-y: auto;
+  max-height: calc(90vh - 140px);
+}
+
+/* Edit Button */
+.editButton {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(17, 153, 142, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .infoCardFull {
+    grid-column: span 1;
+  }
+  
+  .profileHeader {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .profileInfo {
+    text-align: center;
+  }
+  
+  .infoRow {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .infoRow strong {
+    text-align: left;
+    margin-left: 0;
+  }
+  
+  .viewModalBody {
+    padding: 1.5rem;
+  }
+  
+  .historyTable {
+    display: block;
+    overflow-x: auto;
   }
 }

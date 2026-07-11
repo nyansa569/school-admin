@@ -28,7 +28,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(90deg, #0f5c3f, #d4a529);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -44,11 +44,11 @@
 }
 
 /* Color Variants */
-.statCard.blue::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
-.statCard.green::before { background: linear-gradient(90deg, #10b981, #34d399); }
-.statCard.purple::before { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+.statCard.blue::before { background: linear-gradient(90deg, #0f5c3f, #d4a529); }
+.statCard.green::before { background: linear-gradient(90deg, #0f5c3f, #1a7a54); }
+.statCard.purple::before { background: linear-gradient(90deg, #d4a529, #f5c542); }
 .statCard.red::before { background: linear-gradient(90deg, #ef4444, #f87171); }
-.statCard.yellow::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+.statCard.yellow::before { background: linear-gradient(90deg, #d4a529, #f5c542); }
 .statCard.pink::before { background: linear-gradient(90deg, #ec4899, #f472b6); }
 .statCard.indigo::before { background: linear-gradient(90deg, #6366f1, #818cf8); }
 
@@ -67,12 +67,12 @@
   height: 48px;
   border-radius: 16px;
   background: linear-gradient(135deg, #f8fafc, #f1f5f9);
-  color: #3b82f6;
+  color: #0f5c3f;
   transition: all 0.3s ease;
 }
 
 .statCard:hover .iconWrapper {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #0f5c3f, #d4a529);
   color: white;
   transform: scale(1.05);
 }
@@ -114,7 +114,7 @@
 .statValue {
   font-size: 2rem;
   font-weight: 700;
-  color: #0a1e3c;
+  color: #0f5c3f;
   line-height: 1.2;
   margin-bottom: 0.25rem;
   letter-spacing: -0.02em;
@@ -139,7 +139,7 @@
 
 .badge.success {
   background: #d1fae5;
-  color: #065f46;
+  color: #0f5c3f;
 }
 
 .badge.warning {
@@ -170,7 +170,7 @@
 }
 
 .trendUp {
-  color: #10b981;
+  color: #0f5c3f;
   background: #d1fae5;
 }
 
@@ -216,7 +216,7 @@
 
 .progressBar {
   height: 100%;
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(90deg, #0f5c3f, #d4a529);
   border-radius: 3px;
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -268,7 +268,7 @@
 .secondaryValue {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #0a1e3c;
+  color: #0f5c3f;
 }
 
 /* Detailed Variant */

@@ -1,0 +1,73 @@
+/* app/parent/results/components/TermSelector.module.css */
+
+.termSelector {
+  margin-bottom: 24px;
+}
+
+.termLabel {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.termButtons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.termBtn {
+  flex: 1;
+  min-width: 100px;
+  padding: 12px 16px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.termBtn:hover {
+  border-color: #6A1B2A;
+  background: #fef2f2;
+}
+
+.activeTerm {
+  background: #6A1B2A;
+  border-color: #6A1B2A;
+  color: white;
+}
+
+.termName {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.termYear {
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .termButtons {
+    gap: 8px;
+  }
+  
+  .termBtn {
+    min-width: 80px;
+    padding: 10px 12px;
+  }
+  
+  .termName {
+    font-size: 13px;
+  }
+}

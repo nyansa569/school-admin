@@ -1,0 +1,814 @@
+/* app/(dashboard)/abtl-analysis/page.module.css */
+
+.pageContainer {
+  min-height: 100vh;
+  background: #f8fafc;
+}
+
+.contentWrapper {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Filters */
+.filterSection {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.filterRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filterGroup label {
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.select, .selectSmall {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  background: white;
+  cursor: pointer;
+}
+
+.selectSmall {
+  padding: 6px 10px;
+}
+
+/* Statistics Dashboard */
+.statsDashboard {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  color: #1f2937;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.statCard {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+}
+
+.statIcon {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.statValue {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.statSub {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+/* Distribution */
+.distributionSection, .confidenceSection, .subjectSection {
+  margin-bottom: 32px;
+}
+
+.distributionSection h4, .confidenceSection h4, .subjectSection h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: #374151;
+}
+
+.distributionBars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.distributionItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.distributionLabel {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #4b5563;
+}
+
+.distributionBarContainer {
+  background: #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 24px;
+}
+
+.distributionBar {
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.5s ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.confidenceCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.confidenceCard {
+  text-align: center;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+.confidenceValue {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1f2937;
+}
+
+.confidenceLabel {
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin: 4px 0;
+}
+
+.confidenceDesc {
+  font-size: 0.7rem;
+  color: #6b7280;
+}
+
+.subjectGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.strengthBox, .improvementBox {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.strengthBox h5, .improvementBox h5 {
+  margin: 0 0 12px 0;
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+.subjectItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+}
+
+.subjectItem span:first-child {
+  width: 120px;
+  flex-shrink: 0;
+}
+
+.subjectBar {
+  flex: 1;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.subjectBarFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.subjectScore {
+  width: 45px;
+  text-align: right;
+  font-weight: 500;
+}
+
+/* Table Filters */
+.tableFilters {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  justify-content: flex-end;
+}
+
+/* Analysis Table */
+.tableSection {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.tableTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+  color: #1f2937;
+}
+
+.tableInfo {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.analysisTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.analysisTable th,
+.analysisTable td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.analysisTable th {
+  background: #f9fafb;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6b7280;
+}
+
+.analysisTable tr:hover {
+  background: #f9fafb;
+}
+
+.studentCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.studentAvatar {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 0.75rem;
+}
+
+.programmeCell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.programmeIcon {
+  font-size: 1.1rem;
+}
+
+.secondScore {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  margin-left: 4px;
+}
+
+.scoreBadge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+.scoreExcellent {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.scoreGood {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.scoreAverage {
+  background: #fed7aa;
+  color: #92400e;
+}
+
+.scoreLow {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.confidenceBadge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.confidenceHigh {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.confidenceMedium {
+  background: #fed7aa;
+  color: #92400e;
+}
+
+.confidenceLow {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.viewButton {
+  padding: 4px 12px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.viewButton:hover {
+  background: #5a67d8;
+}
+
+/* Methodology Section */
+.methodologySection {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.methodologyDetails {
+  cursor: pointer;
+}
+
+.methodologyDetails summary {
+  font-weight: 500;
+  color: #374151;
+  padding: 8px 0;
+}
+
+.methodologyContent {
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.methodologyContent h4 {
+  margin: 16px 0 8px 0;
+  font-size: 0.85rem;
+  color: #374151;
+}
+
+.methodologyContent ul {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.methodologyContent li {
+  margin: 4px 0;
+  font-size: 0.8rem;
+  color: #4b5563;
+}
+
+.formulasGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.formulaCard {
+  background: white;
+  border-radius: 8px;
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+.formulaHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 0.8rem;
+}
+
+.formulaBody {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.formulaTag {
+  background: #e5e7eb;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  color: #374151;
+}
+
+.methodologyNote {
+  margin-top: 12px;
+  padding: 10px;
+  background: #fef3c7;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: #92400e;
+}
+
+/* Empty State */
+.emptyState {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 16px;
+}
+
+.emptyIcon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+}
+
+.emptyState h3 {
+  margin: 0 0 8px 0;
+  color: #374151;
+}
+
+.emptyState p {
+  color: #6b7280;
+  margin: 0 0 8px 0;
+}
+
+.emptyHint {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.modal {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 16px 16px 0 0;
+}
+
+.modalHeader h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.modalBody {
+  padding: 24px;
+}
+
+.modalFooter {
+  padding: 16px 24px;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.closeBtn {
+  padding: 8px 24px;
+  background: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Detail Modal Styles */
+.detailStudentInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.detailAvatar {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.detailStudentInfo h3 {
+  margin: 0 0 4px 0;
+}
+
+.detailStudentInfo p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.detailRecommendations {
+  margin-bottom: 24px;
+}
+
+.detailRecommendations h4 {
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+}
+
+.recommendationCards {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 12px;
+}
+
+.recCard {
+  padding: 16px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.recCard1 {
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+}
+
+.recCard2 {
+  background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+}
+
+.recCard3 {
+  background: linear-gradient(135deg, #cd7f32 0%, #e8a95b 100%);
+}
+
+.recRank {
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.recName {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.recScore {
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+}
+
+.recCourses {
+  text-align: left;
+  font-size: 0.7rem;
+  margin-top: 8px;
+}
+
+.recCourses ul {
+  margin: 4px 0 0 16px;
+  padding: 0;
+}
+
+.detailSubjects, .detailAllScores, .detailExplanation {
+  margin-bottom: 24px;
+}
+
+.detailSubjects h4, .detailAllScores h4, .detailExplanation h4 {
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+}
+
+.subjectPerformanceGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.subjectPerformanceItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.subjectPerformanceLabel {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+}
+
+.subjectPerformanceBar {
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.subjectPerformanceFill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.allScoresGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scoreItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.scoreItemHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+}
+
+.scoreItemBar {
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.scoreItemFill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.explanationBox {
+  background: #f0fdf4;
+  padding: 16px;
+  border-radius: 12px;
+  border-left: 4px solid #10b981;
+}
+
+.explanationBox p {
+  margin: 0 0 8px 0;
+  font-size: 0.8rem;
+}
+
+.explanationBox ul {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.explanationBox li {
+  font-size: 0.8rem;
+  margin: 4px 0;
+}
+
+.explanationNote {
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid #d1fae5;
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .subjectGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .recommendationCards {
+    grid-template-columns: 1fr;
+  }
+  
+  .filterRow {
+    grid-template-columns: 1fr;
+  }
+  
+  .tableFilters {
+    flex-direction: column;
+  }
+  
+  .analysisTable {
+    font-size: 0.7rem;
+  }
+  
+  .analysisTable th,
+  .analysisTable td {
+    padding: 8px;
+  }
+}

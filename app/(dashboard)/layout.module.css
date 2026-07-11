@@ -16,12 +16,22 @@
 
 .main {
   flex: 1;
-  margin-left: 272px; /* matches sidebar width */
   padding: 0;
   overflow-y: auto;
   overflow-x: hidden;
   background: #f1f5f9;
   position: relative;
+  transition: margin-left 0.3s ease;
+}
+
+/* Default margin (sidebar expanded) */
+.main {
+  margin-left: 272px;
+}
+
+/* When sidebar is collapsed, adjust margin */
+.main.collapsed {
+  margin-left: 88px;
 }
 
 /* Custom Scrollbar */

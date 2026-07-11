@@ -46,6 +46,9 @@ body {
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
 }
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   line-height: 1.6;

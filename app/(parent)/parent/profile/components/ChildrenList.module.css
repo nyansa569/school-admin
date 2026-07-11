@@ -1,0 +1,229 @@
+/* app/parent/profile/components/ChildrenList.module.css */
+
+.container {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+}
+
+.header p {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.childrenList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.childCard {
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.childCard:hover {
+  border-color: #d1d5db;
+}
+
+.childHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  cursor: pointer;
+  background: white;
+  transition: background 0.2s ease;
+}
+
+.childHeader:hover {
+  background: #f9fafb;
+}
+
+.childAvatar {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #6A1B2A 0%, #5a1524 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  flex-shrink: 0;
+}
+
+.childInfo {
+  flex: 1;
+}
+
+.childName {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.childClass {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.childStatus {
+  margin-right: 8px;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.statusActive {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.statusInactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.statusGraduated {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.expandBtn {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expandBtn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.childDetails {
+  padding: 16px;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.detailsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detailLabel {
+  font-size: 10px;
+  font-weight: 500;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.detailValue {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.quickActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.actionLink {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: #4b5563;
+  transition: all 0.2s ease;
+}
+
+.actionLink:hover {
+  border-color: #6A1B2A;
+  background: #fef2f2;
+  color: #6A1B2A;
+}
+
+.actionLink span {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+  
+  .childHeader {
+    gap: 12px;
+  }
+  
+  .childAvatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+  
+  .childName {
+    font-size: 14px;
+  }
+  
+  .detailsGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .quickActions {
+    flex-direction: column;
+  }
+  
+  .actionLink {
+    justify-content: flex-start;
+  }
+}

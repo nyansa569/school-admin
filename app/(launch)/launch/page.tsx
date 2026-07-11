@@ -1,5 +1,6 @@
 import { About } from "@/components/launch_components/About";
 import { Contact } from "@/components/launch_components/Contact";
+import { EnrollNow } from "@/components/launch_components/EnrollNow";
 import { Faculty } from "@/components/launch_components/Faculty";
 import { Footer } from "@/components/launch_components/Footer";
 import { Hero } from "@/components/launch_components/Hero";
@@ -15,6 +16,7 @@ export default function LaunchScreen() {
         <About />
         <Programs />
         <Faculty />
+        <EnrollNow/>
         <Contact />
       </main>
       <Footer />

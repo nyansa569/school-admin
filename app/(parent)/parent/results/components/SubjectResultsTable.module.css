@@ -1,0 +1,476 @@
+/* app/parent/results/components/SubjectResultsTable.module.css */
+
+.tableContainer {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.tableHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.headerLeft h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+}
+
+.headerLeft p {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.summaryStat {
+  text-align: right;
+}
+
+.statLabel {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.statValue {
+  display: block;
+  font-size: 20px;
+  font-weight: 700;
+  color: #6A1B2A;
+}
+
+.quickStats {
+  display: flex;
+  gap: 20px;
+  padding: 16px 20px;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.quickStat {
+  flex: 1;
+}
+
+.quickStatLabel {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.quickStatValue {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.gradeDots {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.gradeDot {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.subjectsList {
+  padding: 8px 0;
+}
+
+.subjectCard {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.subjectCard:last-child {
+  border-bottom: none;
+}
+
+.subjectHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.subjectHeader:hover {
+  background: #f9fafb;
+}
+
+.subjectInfo {
+  flex: 1;
+}
+
+.subjectNameRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.subjectName {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.electiveBadge {
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 8px;
+  background: #fef3c7;
+  color: #92400e;
+  border-radius: 20px;
+}
+
+.subjectCode {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.scoreInfo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.totalScoreContainer {
+  text-align: right;
+}
+
+.totalScoreLabel {
+  display: block;
+  font-size: 9px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.totalScore {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.grade {
+  font-size: 20px;
+  font-weight: 700;
+  min-width: 40px;
+  text-align: center;
+}
+
+.gradeA { color: #10b981; }
+.gradeB { color: #3b82f6; }
+.gradeC { color: #8b5cf6; }
+.gradeD { color: #f59e0b; }
+.gradeE { color: #f97316; }
+.gradeF { color: #ef4444; }
+.gradeDefault { color: #1f2937; }
+
+.expandBtn {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expandBtn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.subjectDetails {
+  padding: 0 20px 20px 20px;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.scoresSection, .gradeSection {
+  margin-bottom: 20px;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.sectionIcon {
+  font-size: 16px;
+}
+
+.scoresGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.scoreCard {
+  display: flex;
+  gap: 12px;
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.scoreCardIcon {
+  font-size: 24px;
+}
+
+.scoreCardInfo {
+  flex: 1;
+}
+
+.scoreCardLabel {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.scoreBarContainer {
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.scoreBar {
+  height: 100%;
+  background: #6A1B2A;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.scoreCardValue {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.gradeGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.gradeCard {
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.gradeCardLabel {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.gradeCardValue {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.analysisSection {
+  padding: 20px;
+  background: #fef2f2;
+  border-top: 1px solid #e5e7eb;
+}
+
+.analysisHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.analysisIcon {
+  font-size: 20px;
+}
+
+.analysisHeader h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.analysisGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.analysisItem {
+  text-align: center;
+}
+
+.analysisLabel {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 6px;
+}
+
+.analysisValue {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.legendSection {
+  padding: 20px;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.legendHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.legendIcon {
+  font-size: 18px;
+}
+
+.legendHeader h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4b5563;
+  margin: 0;
+}
+
+.legendGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.legendGrade {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.legendInfo {
+  flex: 1;
+}
+
+.legendRange {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.legendRemarks {
+  display: block;
+  font-size: 10px;
+  color: #6b7280;
+}
+
+.legendPoints {
+  display: block;
+  font-size: 9px;
+  color: #9ca3af;
+}
+
+@media (max-width: 768px) {
+  .quickStats {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .scoreInfo {
+    gap: 10px;
+  }
+  
+  .totalScore {
+    font-size: 14px;
+  }
+  
+  .grade {
+    font-size: 16px;
+    min-width: 35px;
+  }
+  
+  .scoresGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .gradeGrid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .analysisGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .legendGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .subjectDetails {
+    padding: 0 16px 16px 16px;
+  }
+  
+  .subjectHeader {
+    padding: 12px 16px;
+  }
+  
+  .subjectName {
+    font-size: 14px;
+  }
+}

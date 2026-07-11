@@ -1,367 +1,352 @@
-'use client';
+// app/(dashboard)/department/page.tsx
+"use client";
 
-import React, { useState, useMemo } from 'react';
-import styles from './page.module.css';
-import { departmentsMockData } from '@/data/departmentMockData'; // Adjust path as needed
-import Header from '@/components/Header/Header';
-import Stats from '@/components/Stats/Stats';
-import StatFilter from '@/components/StatFilter/StatFilter';
-import Table from '@/components/Table/Table';
+import React, { useState, useMemo, useEffect } from "react";
+import {
+  getDepartments,
+  createDepartment,
+  updateDepartment,
+  deleteDepartment,
+  getStaffForDropdown,
+  getDepartmentStats,
+  Department,
+} from "@/lib/action/admin/department";
+import Header from "@/components/Header/Header";
+import Stats from "@/components/Stats/Stats";
+import StatFilter from "@/components/StatFilter/StatFilter";
+import Table from "@/components/Table/Table";
+import { Action } from "@/components/Table/Table";
+import styles from "./page.module.css";
 
-// Types
-interface HeadTeacher {
-  id: string;
-  fullName: string;
-  staffId: string;
-}
-
-interface Department {
-  id: string;
-  name: string;
-  code: string;
-  description: string;
-  headTeacher: HeadTeacher;
-  totalClasses: number;
-  totalStudents: number;
-  createdAt: string;
-}
-
-const DepartmentsAdminPage = () => {
-  const [departments, setDepartments] = useState<Department[]>(departmentsMockData);
-  const [filteredDepartments, setFilteredDepartments] = useState<Department[]>(departments);
+export default function DepartmentPage() {
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const [filteredDepartments, setFilteredDepartments] = useState<Department[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [staff, setStaff] = useState<any[]>([]);
+  const [stats, setStats] = useState<any>(null);
+  
+  // Modal states
   const [showModal, setShowModal] = useState(false);
-  const [modalMode, setModalMode] = useState<'create' | 'edit' | 'view'>('create');
+  const [modalMode, setModalMode] = useState<"create" | "edit" | "view">("create");
   const [currentDepartment, setCurrentDepartment] = useState<Department | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [departmentToDelete, setDepartmentToDelete] = useState<string | null>(null);
+  const [departmentToDelete, setDepartmentToDelete] = useState<number | null>(null);
 
   // Form state
-  const [formData, setFormData] = useState<Partial<Department>>({
-    name: '',
-    code: '',
-    description: '',
-    headTeacher: {
-      id: '',
-      fullName: '',
-      staffId: ''
-    },
-    totalClasses: 0,
-    totalStudents: 0,
+  const [formData, setFormData] = useState({
+    name: "",
+    dep_id: "",
+    code: "",
+    head_teacher: "",
+    status: "active",
   });
 
-  // Calculate stats
-  const stats = useMemo(() => {
-    const totalClasses = departments.reduce((sum, d) => sum + d.totalClasses, 0);
-    const totalStudents = departments.reduce((sum, d) => sum + d.totalStudents, 0);
-    const avgStudentsPerDept = departments.length > 0 
-      ? Math.round(totalStudents / departments.length) 
-      : 0;
+  // Load departments
+  const loadDepartments = async () => {
+    setLoading(true);
+    const result = await getDepartments();
+    if (!result.error && result.departments) {
+      setDepartments(result.departments);
+      setFilteredDepartments(result.departments);
+    }
+    
+    const statsResult = await getDepartmentStats();
+    if (statsResult.stats) {
+      setStats(statsResult.stats);
+    }
+    setLoading(false);
+  };
+
+  // Load staff for dropdown
+  const loadStaff = async () => {
+    const result = await getStaffForDropdown();
+    if (result.staff) {
+      setStaff(result.staff);
+    }
+  };
+
+  useEffect(() => {
+    loadDepartments();
+    loadStaff();
+  }, []);
+
+  // Stats for dashboard
+  const dashboardStats = useMemo(() => {
+    const activeDepartments = departments.filter(d => d.status === "active").length;
+    const inactiveDepartments = departments.filter(d => d.status === "inactive").length;
+    const departmentsWithHead = departments.filter(d => d.head_teacher).length;
 
     return [
       {
         id: 1,
-        label: 'Total Departments',
+        label: "Total Departments",
         value: departments.length,
-        trend: { value: 0, label: 'stable' },
-        color: 'blue',
-        type: 'classes'
+        trend: { value: 0, label: "total" },
+        color: "blue",
+        type: "departments",
       },
       {
         id: 2,
-        label: 'Total Classes',
-        value: totalClasses,
-        trend: { value: 2, label: 'new' },
-        color: 'green',
-        type: 'classes'
+        label: "Active Departments",
+        value: activeDepartments,
+        trend: { value: 0, label: "currently active" },
+        color: "green",
+        type: "active",
       },
       {
         id: 3,
-        label: 'Total Students',
-        value: totalStudents,
-        trend: { value: 5, label: 'growth' },
-        color: 'purple',
-        type: 'students'
+        label: "With Head Teacher",
+        value: departmentsWithHead,
+        trend: { value: 0, label: "assigned" },
+        color: "purple",
+        type: "assigned",
       },
       {
         id: 4,
-        label: 'Avg Students/Dept',
-        value: avgStudentsPerDept,
-        unit: ' students',
-        color: 'orange',
-        type: 'attendance'
-      }
+        label: "Inactive",
+        value: inactiveDepartments,
+        trend: { value: 0, label: "archived" },
+        color: "orange",
+        type: "inactive",
+      },
     ];
   }, [departments]);
 
-  // Table columns configuration
+  // Table columns
   const columns = [
     {
-      header: 'Dept ID',
-      accessor: 'id',
+      header: "Department Code",
+      accessor: "code",
       sortable: true,
-      width: '120px',
-      render: (row: Department) => (
-        <span className={styles.deptId}>{row.id}</span>
-      )
+      width: "120px",
+      render: (row: Department) => row.code || "—",
     },
     {
-      header: 'Department',
-      accessor: 'name',
+      header: "Department Name",
+      accessor: "name",
       sortable: true,
       render: (row: Department) => (
-        <div className={styles.deptCell}>
-          <div className={styles.deptIcon}>
-            {row.code === 'SCI' ? '🔬' : row.code === 'BUS' ? '💼' : '🎨'}
-          </div>
+        <div className={styles.departmentCell}>
+          <div className={styles.departmentIcon}>🏛️</div>
           <div>
-            <div className={styles.deptName}>{row.name}</div>
-            <div className={styles.deptDesc}>{row.description}</div>
+            <div className={styles.departmentName}>{row.name}</div>
+            <div className={styles.departmentId}>{row.dep_id || "No ID"}</div>
           </div>
         </div>
-      )
+      ),
     },
     {
-      header: 'Code',
-      accessor: 'code',
+      header: "Head Teacher",
+      accessor: "head_teacher_details",
       sortable: true,
-      width: '100px',
+      width: "200px",
       render: (row: Department) => (
-        <span className={`${styles.codeBadge} ${styles[`code${row.code}`]}`}>
-          {row.code}
+        row.head_teacher_details ? (
+          <div className={styles.headTeacherCell}>
+            <div className={styles.headTeacherAvatar}>
+              {row.head_teacher_details.first_name[0]}{row.head_teacher_details.last_name[0]}
+            </div>
+            <div>
+              <div className={styles.headTeacherName}>
+                {row.head_teacher_details.first_name} {row.head_teacher_details.last_name}
+              </div>
+              <div className={styles.headTeacherEmail}>{row.head_teacher_details.email}</div>
+            </div>
+          </div>
+        ) : (
+          <span className={styles.notAssigned}>Not assigned</span>
+        )
+      ),
+    },
+    {
+      header: "Status",
+      accessor: "status",
+      sortable: true,
+      width: "100px",
+      render: (row: Department) => (
+        <span className={`${styles.statusBadge} ${row.status === "active" ? styles.statusActive : styles.statusInactive}`}>
+          {row.status || "active"}
         </span>
-      )
+      ),
     },
     {
-      header: 'Head Teacher',
-      accessor: 'headTeacher.fullName',
+      header: "Created",
+      accessor: "created_at",
       sortable: true,
-      render: (row: Department) => (
-        <div className={styles.teacherCell}>
-          <div className={styles.teacherAvatar}>
-            {row.headTeacher.fullName.split(' ').map(n => n[0]).join('')}
-          </div>
-          <div>
-            <div className={styles.teacherName}>{row.headTeacher.fullName}</div>
-            <div className={styles.teacherId}>{row.headTeacher.staffId}</div>
-          </div>
-        </div>
-      )
+      width: "120px",
+      render: (row: Department) => new Date(row.created_at).toLocaleDateString(),
     },
-    {
-      header: 'Classes',
-      accessor: 'totalClasses',
-      sortable: true,
-      width: '100px',
-      render: (row: Department) => (
-        <span className={styles.metricValue}>{row.totalClasses}</span>
-      )
-    },
-    {
-      header: 'Students',
-      accessor: 'totalStudents',
-      sortable: true,
-      width: '120px',
-      render: (row: Department) => (
-        <div className={styles.studentInfo}>
-          <span className={styles.studentCount}>{row.totalStudents}</span>
-          <span className={styles.studentLabel}>students</span>
-        </div>
-      )
-    },
-    {
-      header: 'Created',
-      accessor: 'createdAt',
-      sortable: true,
-      width: '120px'
-    }
   ];
 
   // Filter options
   const filterOptions = [
     {
-      label: 'Department Code',
-      value: 'code',
-      key: 'code',
-      type: 'select' as const,
+      label: "Status",
+      value: "status",
+      key: "status",
+      type: "select" as const,
       options: [
-        { label: 'Science', value: 'SCI' },
-        { label: 'Business', value: 'BUS' },
-        { label: 'Arts', value: 'ART' }
-      ]
-    }
+        { label: "Active", value: "active" },
+        { label: "Inactive", value: "inactive" },
+      ],
+    },
+    {
+      label: "Has Head Teacher",
+      value: "head_teacher",
+      key: "head_teacher",
+      type: "select" as const,
+      options: [
+        { label: "Assigned", value: "assigned" },
+        { label: "Not Assigned", value: "not_assigned" },
+      ],
+    },
   ];
 
   const sortOptions = [
-    { label: 'Name (A-Z)', value: 'name-asc', key: 'name', order: 'asc' as const },
-    { label: 'Name (Z-A)', value: 'name-desc', key: 'name', order: 'desc' as const },
-    { label: 'Students (High to Low)', value: 'students-desc', key: 'totalStudents', order: 'desc' as const },
-    { label: 'Students (Low to High)', value: 'students-asc', key: 'totalStudents', order: 'asc' as const },
-    { label: 'Classes (Most)', value: 'classes-desc', key: 'totalClasses', order: 'desc' as const },
-    { label: 'Created (Newest)', value: 'date-desc', key: 'createdAt', order: 'desc' as const }
+    { label: "Name (A-Z)", value: "name-asc", key: "name", order: "asc" as const },
+    { label: "Name (Z-A)", value: "name-desc", key: "name", order: "desc" as const },
+    { label: "Code (A-Z)", value: "code-asc", key: "code", order: "asc" as const },
+    { label: "Code (Z-A)", value: "code-desc", key: "code", order: "desc" as const },
+    { label: "Created (Newest)", value: "created-desc", key: "created_at", order: "desc" as const },
+    { label: "Created (Oldest)", value: "created-asc", key: "created_at", order: "asc" as const },
   ];
 
   // CRUD Operations
   const handleCreate = () => {
-    setModalMode('create');
+    setModalMode("create");
     setFormData({
-      name: '',
-      code: '',
-      description: '',
-      headTeacher: { id: '', fullName: '', staffId: '' },
-      totalClasses: 0,
-      totalStudents: 0
+      name: "",
+      dep_id: "",
+      code: "",
+      head_teacher: "",
+      status: "active",
     });
     setShowModal(true);
   };
 
-  const handleEdit = (dept: Department) => {
-    setModalMode('edit');
-    setCurrentDepartment(dept);
-    setFormData(dept);
+  const handleEdit = (department: Department) => {
+    setModalMode("edit");
+    setCurrentDepartment(department);
+    setFormData({
+      name: department.name,
+      dep_id: department.dep_id || "",
+      code: department.code || "",
+      head_teacher: department.head_teacher?.toString() || "",
+      status: department.status,
+    });
     setShowModal(true);
   };
 
-  const handleView = (dept: Department) => {
-    setModalMode('view');
-    setCurrentDepartment(dept);
-    setFormData(dept);
+  const handleView = (department: Department) => {
+    setModalMode("view");
+    setCurrentDepartment(department);
+    setFormData({
+      name: department.name,
+      dep_id: department.dep_id || "",
+      code: department.code || "",
+      head_teacher: department.head_teacher?.toString() || "",
+      status: department.status,
+    });
     setShowModal(true);
   };
 
-  const handleDelete = (id: string) => {
-    setDepartmentToDelete(id);
+  const handleDelete = (departmentId: number) => {
+    setDepartmentToDelete(departmentId);
     setShowDeleteConfirm(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (departmentToDelete) {
-      setDepartments(departments.filter(d => d.id !== departmentToDelete));
-      setFilteredDepartments(filteredDepartments.filter(d => d.id !== departmentToDelete));
+      const result = await deleteDepartment(departmentToDelete);
+      if (result.success) {
+        await loadDepartments();
+      } else {
+        alert(result.error);
+      }
       setShowDeleteConfirm(false);
       setDepartmentToDelete(null);
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (modalMode === 'create') {
-      const newDept: Department = {
-        id: `DEP-${String(departments.length + 1).padStart(2, '0')}`,
-        ...formData,
-        createdAt: new Date().toISOString().split('T')[0]
-      } as Department;
-      setDepartments([...departments, newDept]);
-      setFilteredDepartments([...filteredDepartments, newDept]);
-    } else if (modalMode === 'edit' && currentDepartment) {
-      const updated = departments.map(d => 
-        d.id === currentDepartment.id ? { ...d, ...formData } : d
-      );
-      setDepartments(updated);
-      setFilteredDepartments(updated);
+    const submitFormData = new FormData();
+    submitFormData.append("name", formData.name);
+    submitFormData.append("dep_id", formData.dep_id);
+    submitFormData.append("code", formData.code);
+    submitFormData.append("head_teacher", formData.head_teacher);
+    submitFormData.append("status", formData.status);
+
+    let result;
+    if (modalMode === "create") {
+      result = await createDepartment(submitFormData);
+    } else if (modalMode === "edit" && currentDepartment) {
+      result = await updateDepartment(currentDepartment.id, submitFormData);
     }
-    
-    setShowModal(false);
-    setCurrentDepartment(null);
+
+    if (result?.success) {
+      await loadDepartments();
+      setShowModal(false);
+      setCurrentDepartment(null);
+    } else if (result?.error) {
+      alert(result.error);
+    }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    
-    if (name.includes('.')) {
-      const [parent, child] = name.split('.');
-      setFormData(prev => ({
-        ...prev,
-        [parent]: {
-          ...(prev[parent as keyof Department] as any),
-          [child]: value
-        }
-      }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Table actions
-  const actions = [
+  // Custom filter function for "Has Head Teacher"
+  const handleFilterChange = (filtered: Department[]) => {
+    // Apply custom filtering for head_teacher
+    // This is handled by StatFilter, but we'll add additional logic if needed
+    setFilteredDepartments(filtered);
+  };
+
+  // Actions for table
+  const actions: Action<Department>[] = [
     {
-      label: 'View',
-      variant: 'primary',
-      onClick: (row: Department) => handleView(row),
+      label: "View",
+      variant: "primary",
+      onClick: (row) => handleView(row),
       icon: (
         <svg viewBox="0 0 24 24" width="16" height="16">
           <path fill="currentColor" d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z" />
         </svg>
-      )
+      ),
     },
     {
-      label: 'Edit',
-      variant: 'secondary',
-      onClick: (row: Department) => handleEdit(row),
+      label: "Edit",
+      variant: "secondary",
+      onClick: (row) => handleEdit(row),
       icon: (
         <svg viewBox="0 0 24 24" width="16" height="16">
           <path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
         </svg>
-      )
+      ),
     },
     {
-      label: 'Delete',
-      variant: 'danger',
-      onClick: (row: Department) => handleDelete(row.id),
+      label: "Delete",
+      variant: "danger",
+      onClick: (row) => handleDelete(row.id),
       icon: (
         <svg viewBox="0 0 24 24" width="16" height="16">
           <path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
         </svg>
-      )
-    }
+      ),
+    },
   ];
 
-  // Expanded row render
-  const renderExpandedRow = (row: Department) => (
-    <div className={styles.expandedContent}>
-      <div className={styles.expandedSection}>
-        <h4>Department Details</h4>
-        <div className={styles.detailGrid}>
-          <div className={styles.detailItem}>
-            <span className={styles.detailLabel}>ID:</span>
-            <span className={styles.detailValue}>{row.id}</span>
-          </div>
-          <div className={styles.detailItem}>
-            <span className={styles.detailLabel}>Code:</span>
-            <span className={styles.detailValue}>{row.code}</span>
-          </div>
-          <div className={styles.detailItem}>
-            <span className={styles.detailLabel}>Description:</span>
-            <span className={styles.detailValue}>{row.description}</span>
-          </div>
-          <div className={styles.detailItem}>
-            <span className={styles.detailLabel}>Created At:</span>
-            <span className={styles.detailValue}>{row.createdAt}</span>
-          </div>
-        </div>
-      </div>
-
-      <div className={styles.expandedSection}>
-        <h4>Head Teacher</h4>
-        <div className={styles.teacherInfo}>
-          <div className={styles.teacherAvatarLarge}>
-            {row.headTeacher.fullName.split(' ').map(n => n[0]).join('')}
-          </div>
-          <div>
-            <div className={styles.teacherNameLarge}>{row.headTeacher.fullName}</div>
-            <div className={styles.teacherIdLarge}>Staff ID: {row.headTeacher.staffId}</div>
-            <div className={styles.teacherIdLarge}>Teacher ID: {row.headTeacher.id}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  if (loading) return <div className={styles.loading}>Loading departments...</div>;
 
   return (
     <div className={styles.pageContainer}>
-      <Header 
+      <Header
         title="Department Management"
-        subtitle="Manage departments, assign head teachers, and monitor capacity"
+        subtitle="Manage school departments, assign head teachers, and track department codes"
         customActions={
           <button className={styles.addButton} onClick={handleCreate}>
             <svg viewBox="0 0 24 24" width="20" height="20">
@@ -373,9 +358,8 @@ const DepartmentsAdminPage = () => {
       />
 
       <div className={styles.contentWrapper}>
-        {/* Stats Section */}
-        <Stats 
-          stats={stats}
+        <Stats
+          stats={dashboardStats}
           variant="cards"
           columns={4}
           showTrend={true}
@@ -383,24 +367,22 @@ const DepartmentsAdminPage = () => {
           size="md"
         />
 
-        {/* Filter Section */}
         <div className={styles.filterSection}>
           <StatFilter
             data={departments}
             onFilterChange={setFilteredDepartments}
-            searchKeys={['name', 'code', 'headTeacher.fullName', 'description']}
+            searchKeys={["name", "dep_id", "code", "head_teacher_details.first_name", "head_teacher_details.last_name"]}
             sortOptions={sortOptions}
             filterOptions={filterOptions}
             variant="default"
             showSearch={true}
             showSort={true}
             showFilter={true}
-            searchPlaceholder="Search departments..."
+            searchPlaceholder="Search departments by name, code, or head teacher..."
             enableReset={true}
           />
         </div>
 
-        {/* Table Section */}
         <div className={styles.tableSection}>
           <Table
             columns={columns}
@@ -411,25 +393,23 @@ const DepartmentsAdminPage = () => {
             sortable={true}
             pagination={true}
             pageSize={10}
-            // actions={actions}
-            expandable={true}
-            renderExpandedRow={renderExpandedRow}
+            actions={actions}
             showRowNumbers={true}
             emptyMessage="No departments found"
-            loading={false}
+            loading={loading}
           />
         </div>
       </div>
 
-      {/* Modal Section (Same structure as example) */}
+      {/* Create/Edit Modal */}
       {showModal && (
         <div className={styles.modalOverlay} onClick={() => setShowModal(false)}>
           <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.modalHeader}>
               <h2>
-                {modalMode === 'create' && 'Add New Department'}
-                {modalMode === 'edit' && 'Edit Department'}
-                {modalMode === 'view' && 'Department Details'}
+                {modalMode === "create" && "Add New Department"}
+                {modalMode === "edit" && "Edit Department"}
+                {modalMode === "view" && "Department Details"}
               </h2>
               <button className={styles.closeButton} onClick={() => setShowModal(false)}>
                 <svg viewBox="0 0 24 24" width="24" height="24">
@@ -440,118 +420,93 @@ const DepartmentsAdminPage = () => {
 
             <form onSubmit={handleSubmit} className={styles.modalBody}>
               <div className={styles.formGrid}>
-                {/* Basic Info */}
                 <div className={styles.formSection}>
-                  <h3 className={styles.sectionTitle}>Basic Information</h3>
+                  <h3 className={styles.sectionTitle}>Department Information</h3>
                   
-                  <div className={styles.formGroup}>
-                    <label>Department Name *</label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      required
-                      disabled={modalMode === 'view'}
-                      placeholder="Science"
-                    />
+                  <div className={styles.formRow}>
+                    <div className={styles.formGroup}>
+                      <label>Department Name *</label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        required
+                        disabled={modalMode === "view"}
+                        placeholder="e.g., Science, Mathematics, Languages"
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label>Department ID</label>
+                      <input
+                        type="text"
+                        name="dep_id"
+                        value={formData.dep_id}
+                        onChange={handleInputChange}
+                        disabled={modalMode === "view"}
+                        placeholder="e.g., DEP-001"
+                      />
+                    </div>
                   </div>
 
                   <div className={styles.formRow}>
                     <div className={styles.formGroup}>
-                      <label>Code *</label>
+                      <label>Department Code</label>
                       <input
                         type="text"
                         name="code"
                         value={formData.code}
                         onChange={handleInputChange}
-                        required
-                        disabled={modalMode === 'view'}
-                        placeholder="SCI"
-                        maxLength={3}
+                        disabled={modalMode === "view"}
+                        placeholder="e.g., SCI, MATH, LANG"
                       />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label>Head Teacher</label>
+                      <select
+                        name="head_teacher"
+                        value={formData.head_teacher}
+                        onChange={handleInputChange}
+                        disabled={modalMode === "view"}
+                      >
+                        <option value="">Select Head Teacher</option>
+                        {staff.map((s) => (
+                          <option key={s.id} value={s.id}>
+                            {s.first_name} {s.last_name} ({s.role})
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
 
-                  <div className={styles.formGroup}>
-                    <label>Description</label>
-                    <textarea
-                      name="description"
-                      value={formData.description}
-                      onChange={handleInputChange}
-                      disabled={modalMode === 'view'}
-                      rows={3}
-                      placeholder="Department description..."
-                      className={styles.textarea}
-                    />
-                  </div>
-                </div>
-
-                {/* Head Teacher & Stats */}
-                <div className={styles.formSection}>
-                  <h3 className={styles.sectionTitle}>Head Teacher</h3>
-                  
-                  <div className={styles.formGroup}>
-                    <label>Full Name *</label>
-                    <input
-                      type="text"
-                      name="headTeacher.fullName"
-                      value={formData.headTeacher?.fullName}
-                      onChange={handleInputChange}
-                      required
-                      disabled={modalMode === 'view'}
-                      placeholder="John Doe"
-                    />
-                  </div>
-
-                  <div className={styles.formGroup}>
-                    <label>Staff ID *</label>
-                    <input
-                      type="text"
-                      name="headTeacher.staffId"
-                      value={formData.headTeacher?.staffId}
-                      onChange={handleInputChange}
-                      required
-                      disabled={modalMode === 'view'}
-                      placeholder="EMP-2024-001"
-                    />
-                  </div>
-
-                  <h3 className={styles.sectionTitle} style={{ marginTop: '20px' }}>Statistics</h3>
                   <div className={styles.formRow}>
                     <div className={styles.formGroup}>
-                      <label>Total Classes</label>
-                      <input
-                        type="number"
-                        name="totalClasses"
-                        value={formData.totalClasses}
+                      <label>Status</label>
+                      <select
+                        name="status"
+                        value={formData.status}
                         onChange={handleInputChange}
-                        min="0"
-                        disabled={modalMode === 'view'}
-                      />
-                    </div>
-                    <div className={styles.formGroup}>
-                      <label>Total Students</label>
-                      <input
-                        type="number"
-                        name="totalStudents"
-                        value={formData.totalStudents}
-                        onChange={handleInputChange}
-                        min="0"
-                        disabled={modalMode === 'view'}
-                      />
+                        disabled={modalMode === "view"}
+                      >
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                      </select>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {modalMode !== 'view' && (
+              {modalMode !== "view" && (
                 <div className={styles.modalFooter}>
-                  <button type="button" className={styles.cancelButton} onClick={() => setShowModal(false)}>
+                  <button
+                    type="button"
+                    className={styles.cancelButton}
+                    onClick={() => setShowModal(false)}
+                  >
                     Cancel
                   </button>
                   <button type="submit" className={styles.submitButton}>
-                    {modalMode === 'create' ? 'Create Department' : 'Update Department'}
+                    {modalMode === "create" ? "Create Department" : "Update Department"}
                   </button>
                 </div>
               )}
@@ -560,7 +515,7 @@ const DepartmentsAdminPage = () => {
         </div>
       )}
 
-      {/* Delete Confirmation */}
+      {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <div className={styles.modalOverlay} onClick={() => setShowDeleteConfirm(false)}>
           <div className={styles.confirmModal} onClick={(e) => e.stopPropagation()}>
@@ -570,9 +525,12 @@ const DepartmentsAdminPage = () => {
               </svg>
             </div>
             <h3>Delete Department</h3>
-            <p>Are you sure you want to delete this department? This action cannot be undone.</p>
+            <p>Are you sure you want to delete this department? This action can be reversed.</p>
             <div className={styles.confirmActions}>
-              <button className={styles.cancelButton} onClick={() => setShowDeleteConfirm(false)}>
+              <button
+                className={styles.cancelButton}
+                onClick={() => setShowDeleteConfirm(false)}
+              >
                 Cancel
               </button>
               <button className={styles.deleteButton} onClick={confirmDelete}>
@@ -584,6 +542,4 @@ const DepartmentsAdminPage = () => {
       )}
     </div>
   );
-};
-
-export default DepartmentsAdminPage;
+}

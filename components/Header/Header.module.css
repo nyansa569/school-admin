@@ -1,107 +1,166 @@
+/* components/Header/Header.module.css */
+
 .header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 2rem;
-  background: linear-gradient(145deg, #ffffff 0%, #fafbfc 100%);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-  width: 100%;
-  position: relative;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 30;
 }
 
 .headerLeft {
-  display: flex;
-  align-items: center;
+  flex: 1;
 }
 
 .titleSection {
   display: flex;
   flex-direction: column;
+  gap: 0.25rem;
 }
 
 .title {
-  font-size: 1.875rem;
-  font-weight: 700;
-  color: #0a1e3c;
-  letter-spacing: -0.02em;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
   margin: 0;
-  line-height: 1.2;
-  position: relative;
-}
-
-.title::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 40px;
-  height: 3px;
-  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-  border-radius: 2px;
 }
 
 .subtitle {
   font-size: 0.875rem;
-  color: #64748b;
-  margin-top: 0.5rem;
-  font-weight: 400;
-  letter-spacing: 0.3px;
+  color: #6b7280;
+  margin: 0;
 }
 
 .headerRight {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
+/* Export Group */
 .exportGroup {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding-right: 1.5rem;
-  border-right: 1px solid #e2e8f0;
+  position: relative;
+}
+
+.simpleExportGroup {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .exportBtn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.625rem 1.25rem;
-  border-radius: 12px;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
   font-size: 0.875rem;
-  font-weight: 600;
-  border: 1px solid transparent;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  background: white;
-  color: #1e293b;
-  border-color: #e2e8f0;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  border: 1px solid;
+  background: transparent;
 }
 
-.exportBtn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
-  border-color: #cbd5e1;
+.pdfBtn {
+  border-color: #ef4444;
+  color: #ef4444;
 }
 
 .pdfBtn:hover {
-  background: #fee2e2;
-  color: #dc2626;
-  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+.csvBtn {
+  border-color: #10b981;
+  color: #10b981;
 }
 
 .csvBtn:hover {
-  background: #dbeafe;
-  color: #2563eb;
-  border-color: #bfdbfe;
+  background: #ecfdf5;
 }
 
-.btnIcon {
-  margin-right: 0.25rem;
+.exportDropdownBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  margin-left: 0.25rem;
+  transition: all 0.2s ease;
+  color: #6b7280;
+  z-index: 9999999;
 }
 
+.exportDropdownBtn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+/* Export Dropdown */
+.exportDropdown {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  min-width: 240px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.dropdownHeader {
+  padding: 0.75rem 1rem;
+  background: #f9fafb;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dropdownSection {
+  padding: 0.5rem;
+}
+
+.dropdownSectionTitle {
+  padding: 0.5rem 0.5rem 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: transparent;
+  font-size: 0.875rem;
+  color: #374151;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.dropdownItem:hover {
+  background: #f3f4f6;
+}
+
+/* Extra Features */
 .extraFeatures {
   display: flex;
   align-items: center;
@@ -113,184 +172,266 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  background: white;
-  color: #475569;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
   cursor: pointer;
+  color: #6b7280;
   transition: all 0.2s ease;
-  padding: 0;
 }
 
 .iconBtn:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
-  color: #0a1e3c;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  background: #f3f4f6;
+  color: #374151;
 }
 
 .notificationBadge {
   position: absolute;
-  top: -4px;
-  right: -4px;
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+  top: 2px;
+  right: 2px;
+  background: #ef4444;
   color: white;
+  font-size: 0.625rem;
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 10px;
+}
+
+/* Notification Dropdown */
+.notificationWrapper {
+  position: relative;
+}
+
+.notificationDropdown {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  width: 320px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  overflow: hidden;
+}
+
+.markAllRead {
   font-size: 0.7rem;
-  font-weight: 700;
-  min-width: 18px;
-  height: 18px;
-  border-radius: 9px;
+  color: #6b7280;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.markAllRead:hover {
+  color: #374151;
+}
+
+.notificationList {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.notificationItem {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 4px;
-  border: 2px solid white;
-  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.notificationItem:hover {
+  background: #f9fafb;
+}
+
+.notificationDot {
+  width: 8px;
+  height: 8px;
+  background: #3b82f6;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.notificationDotRead {
+  width: 8px;
+  height: 8px;
+  background: #d1d5db;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.notificationTitle {
+  font-size: 0.813rem;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.notificationTime {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  margin-top: 2px;
+}
+
+.dropdownFooter {
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.viewAllBtn {
+  font-size: 0.75rem;
+  color: #6b7280;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.viewAllBtn:hover {
+  color: #374151;
+}
+
+/* Profile Button */
+.profileWrapper {
+  position: relative;
 }
 
 .profileBtn {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.5rem;
-  border-radius: 14px;
-  border: 1px solid #e2e8f0;
-  background: white;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 40px;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .profileBtn:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
-  transform: translateY(-1px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
+  background: #f9fafb;
+  border-color: #d1d5db;
 }
 
 .profileAvatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  width: 32px;
+  height: 32px;
+  background: #6A1B2A;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
+  font-size: 0.875rem;
   font-weight: 600;
-  font-size: 0.9rem;
-  text-transform: uppercase;
 }
 
 .profileInfo {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-right: 0.25rem;
 }
 
 .profileName {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #0a1e3c;
-  line-height: 1.4;
+  color: #1f2937;
 }
 
 .profileRole {
   font-size: 0.7rem;
-  color: #64748b;
-  font-weight: 400;
+  color: #6b7280;
 }
 
-.dropdownIcon {
-  color: #64748b;
-  transition: transform 0.2s ease;
+/* Profile Dropdown */
+.profileDropdown {
+  position: absolute;
+  top: 55px;
+  right: 0;
+  width: 260px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  overflow: hidden;
 }
 
-.profileBtn:hover .dropdownIcon {
-  transform: rotate(180deg);
-  color: #0a1e3c;
-}
-
-.customActions {
+.profileDropdownAvatar {
+  width: 40px;
+  height: 40px;
+  background: #6A1B2A;
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding-left: 1rem;
-  border-left: 1px solid #e2e8f0;
+  justify-content: center;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
+.profileDropdownName {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.profileDropdownRole {
+  font-size: 0.7rem;
+  color: #6b7280;
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 0.5rem 0;
+}
+
+.logoutItem {
+  color: #ef4444;
+}
+
+.logoutItem:hover {
+  background: #fef2f2;
+}
+
+/* Custom Actions */
+.customActions {
+  border-left: 1px solid #e5e7eb;
+  padding-left: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
   .header {
-    padding: 1.25rem 1.5rem;
+    padding: 0.75rem 1rem;
   }
-
+  
   .title {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
-
-  .exportBtn span {
+  
+  .subtitle {
     display: none;
   }
-
-  .exportBtn {
-    padding: 0.625rem;
-  }
-
-  .btnIcon {
-    margin-right: 0;
-  }
-
+  
   .profileInfo {
     display: none;
   }
-}
-
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .headerRight {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .exportGroup {
-    padding-right: 1rem;
-  }
-
-  .title::after {
-    width: 30px;
-  }
-}
-
-@media (max-width: 480px) {
-  .header {
-    padding: 1rem;
-  }
-
-  .extraFeatures {
-    gap: 0.25rem;
-  }
-
-  .iconBtn {
-    width: 38px;
-    height: 38px;
-  }
-
+  
   .profileBtn {
-    padding: 0.375rem;
+    padding: 0.5rem;
   }
-
-  .profileAvatar {
-    width: 34px;
-    height: 34px;
+  
+  .exportBtn span {
+    display: none;
+  }
+  
+  .exportBtn {
+    padding: 0.5rem;
   }
 }

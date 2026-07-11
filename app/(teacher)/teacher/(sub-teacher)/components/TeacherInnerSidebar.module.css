@@ -1,0 +1,275 @@
+/* app/(teacher)/teacher/(sub-teacher)/components/TeacherInnerSidebar.module.css */
+
+.sidebar {
+  width: 380px;
+  background: #10354a ;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 4px 0 24px rgba(106, 27, 42, 0.2);
+  border-left: 1px solid rgb(255, 254, 254);
+  height: 100vh;
+  position: sticky;
+  top: 0;
+}
+
+/* Header */
+.header {
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+}
+
+.header h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: #FFFFFF;
+}
+
+.header p {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Search */
+.searchContainer {
+  position: relative;
+  padding: 1rem 1.5rem;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.625rem 2.5rem 0.625rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: #FFFFFF;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #FFFFFF;
+}
+
+.searchInput::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.searchIcon {
+  position: absolute;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* Content */
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 1rem;
+}
+
+/* Tree List */
+.treeList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.treeNode {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Class Header */
+.classHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+}
+
+.classHeader:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.classHeader.expanded {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #FFFFFF;
+  border-radius: 12px 12px 0 0;
+}
+
+.expandIcon {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  width: 20px;
+  transition: transform 0.2s ease;
+}
+
+.classHeader.expanded .expandIcon {
+  color: #FFFFFF;
+}
+
+.classIcon {
+  font-size: 1.25rem;
+}
+
+.className {
+  flex: 1;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.classBadge {
+  font-size: 0.7rem;
+  padding: 0.125rem 0.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  color: #FFFFFF;
+}
+
+/* Subjects Container */
+.subjectsContainer {
+  display: flex;
+  flex-direction: column;
+  margin-left: 2.5rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  border-left: 2px solid rgba(255, 255, 255, 0.25);
+  padding-left: 0.5rem;
+}
+
+/* Subject Link */
+.subjectLink {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+  margin: 0.125rem 0;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.subjectLink:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateX(4px);
+}
+
+.activeSubject {
+  background: rgba(255, 255, 255, 0.12);
+  border-left: 3px solid #FFFFFF;
+}
+
+.subjectIcon {
+  font-size: 1rem;
+}
+
+.subjectName {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.subjectCode {
+  font-size: 0.65rem;
+  padding: 0.125rem 0.375rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: monospace;
+}
+
+.noSubjects {
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.45);
+  text-align: center;
+}
+
+/* Empty State */
+.emptyState {
+  padding: 3rem 1rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+  opacity: 0.5;
+}
+
+.emptyState p {
+  font-size: 0.875rem;
+}
+
+/* Footer */
+.footer {
+  margin-top: auto;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footerDivider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+  margin-bottom: 1rem;
+}
+
+.footerText {
+  display: flex;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* Scrollbar */
+.content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: #FFFFFF;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 300px;
+    position: fixed;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}

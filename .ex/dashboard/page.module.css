@@ -1,0 +1,539 @@
+.dashboard {
+  min-height: 100vh;
+  background-color: #f9fafb;
+}
+
+.container {
+  padding: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.pageTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+
+.pageSubtitle {
+  color: #6b7280;
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.periodSelector {
+  display: flex;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+}
+
+.periodButton {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  background: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.periodButton:hover {
+  color: #111827;
+}
+
+.activePeriod {
+  background-color: #2563eb;
+  color: #ffffff !important;
+}
+
+.activePeriod:hover {
+  background-color: #1d4ed8;
+  color: #ffffff !important;
+}
+
+.refreshButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.refreshButton:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.statCard {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f3f4f6;
+  transition: all 0.3s ease;
+}
+
+.statCard:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.statHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.statIcon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.statIcon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.statTrend {
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.statTrend.up {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.statTrend.down {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.statContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.statTitle {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin: 0 0 0.25rem 0;
+}
+
+.statValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.chartsSection {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.chartCard {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f3f4f6;
+}
+
+.chartHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.chartTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.chartSelect {
+  padding: 0.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  color: #374151;
+  background-color: #ffffff;
+  cursor: pointer;
+  outline: none;
+}
+
+.chartSelect:focus {
+  border-color: transparent;
+}
+
+.attendanceList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.attendanceItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.attendanceClass {
+  width: 5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.attendanceBarContainer {
+  flex: 1;
+  height: 0.5rem;
+  background-color: #f3f4f6;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.attendanceBar {
+  height: 100%;
+  background: linear-gradient(to right, #2563eb, #4f46e5);
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+.attendancePercentage {
+  width: 3rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-align: right;
+}
+
+.quickActions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.quickAction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem 1rem;
+  background: none;
+  border: 1px solid #f3f4f6;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #374151;
+}
+
+.quickAction:hover {
+  background-color: #f9fafb;
+  border-color: #e5e7eb;
+  transform: translateY(-2px);
+}
+
+.quickActionIcon {
+  width: 3rem;
+  height: 3rem;
+  background-color: #dbeafe;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2563eb;
+}
+
+.quickActionIcon svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.quickAction span {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.activitySection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.activityCard {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f3f4f6;
+}
+
+.activityHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.activityTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.viewAllLink {
+  font-size: 0.875rem;
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.viewAllLink:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+.activityList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activityItem {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.activityItem:hover {
+  background-color: #f9fafb;
+}
+
+.activityAvatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+.activityAvatar.enrollment {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+.activityAvatar.submission {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+
+.activityAvatar.leave {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.activityAvatar.meeting {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.activityAvatar.grade {
+  background-color: #f3e8ff;
+  color: #9333ea;
+}
+
+.activityContent {
+  flex: 1;
+}
+
+.activityText {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.875rem;
+  color: #374151;
+}
+
+.activityUser {
+  font-weight: 600;
+  color: #111827;
+}
+
+.activityTarget {
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.activityTime {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.eventList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.eventItem {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.eventItem:hover {
+  background-color: #f9fafb;
+}
+
+.eventDate {
+  width: 3rem;
+  height: 3rem;
+  background-color: #f3f4f6;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.eventMonth {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.eventDay {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1;
+}
+
+.eventContent {
+  flex: 1;
+}
+
+.eventTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.25rem 0;
+}
+
+.eventDetails {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin: 0.125rem 0;
+}
+
+.eventDetails svg {
+  flex-shrink: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 1280px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .chartsSection {
+    grid-template-columns: 1fr;
+  }
+  
+  .activitySection {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .headerActions {
+    width: 100%;
+    flex-direction: column;
+  }
+  
+  .periodSelector {
+    width: 100%;
+  }
+  
+  .periodButton {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .refreshButton {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+}

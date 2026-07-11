@@ -1,0 +1,1545 @@
+/* app/(dashboard)/admin/promotion/page.module.css */
+
+/* ============================================
+   PAGE CONTAINER
+   ============================================ */
+
+.pageContainer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+  padding-bottom: 2rem;
+}
+
+.contentWrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* ============================================
+   LOADING
+   ============================================ */
+
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid #e2e8f0;
+  border-top-color: #11998e;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loadingContainer p {
+  color: #718096;
+  font-size: 0.9375rem;
+}
+
+/* ============================================
+   HEADER ACTIONS
+   ============================================ */
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.historyButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  background: white;
+  color: #4a5568;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.historyButton:hover {
+  background: #f7fafc;
+  border-color: #cbd5e0;
+  transform: translateY(-1px);
+}
+
+.historyButton svg {
+  width: 18px;
+  height: 18px;
+  color: #718096;
+}
+
+.promoteButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.5rem;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(17, 153, 142, 0.3);
+}
+
+.promoteButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(17, 153, 142, 0.4);
+}
+
+.promoteButton svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ============================================
+   FILTER SECTION
+   ============================================ */
+
+.filterSection {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.filterRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filterGroup label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.select {
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+  color: #1e293b;
+}
+
+.select:focus {
+  outline: none;
+  border-color: #11998e;
+  box-shadow: 0 0 0 3px rgba(17, 153, 142, 0.1);
+}
+
+.select:disabled {
+  background: #f8fafc;
+  cursor: not-allowed;
+  color: #94a3b8;
+}
+
+.select option {
+  padding: 0.5rem;
+}
+
+/* ============================================
+   TABLE SECTION
+   ============================================ */
+
+.tableSection {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================
+   STUDENT CELL
+   ============================================ */
+
+.studentCell {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.studentAvatar {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: white;
+  flex-shrink: 0;
+}
+
+.studentName {
+  font-weight: 600;
+  color: #1e293b;
+  font-size: 0.875rem;
+}
+
+.studentId {
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+/* ============================================
+   STATUS BADGES
+   ============================================ */
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.statusActive {
+  background: #d4f4dd;
+  color: #0e7c3a;
+}
+
+.statusInactive {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+/* Modal status badges */
+.statusPending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.statusPromoted {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.statusRetained {
+  background: #fed7aa;
+  color: #9a3412;
+}
+
+.statusGraduated {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+/* ============================================
+   MODAL OVERLAY & CONTAINER
+   ============================================ */
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
+  background: white;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.largeModal {
+  max-width: 1000px;
+}
+
+/* ============================================
+   MODAL HEADER
+   ============================================ */
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  flex-shrink: 0;
+}
+
+.modalHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.closeButton {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: rotate(90deg);
+}
+
+.closeButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.closeButton svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ============================================
+   MODAL BODY
+   ============================================ */
+
+.modalBody {
+  padding: 2rem;
+  overflow-y: auto;
+  flex: 1;
+  max-height: calc(90vh - 180px);
+}
+
+/* ============================================
+   MODAL FOOTER
+   ============================================ */
+
+.modalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1.25rem 2rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f7fafc;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   STEP CONTENT
+   ============================================ */
+
+.stepContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.stepTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.stepDescription {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ============================================
+   PROMOTION TYPE SELECTION
+   ============================================ */
+
+.promotionTypeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.promotionTypeCard {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.promotionTypeCard:hover {
+  border-color: #11998e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.promotionTypeCard.selected {
+  border-color: #11998e;
+  background: #f0fdf4;
+  box-shadow: 0 4px 12px rgba(17, 153, 142, 0.15);
+}
+
+.promotionTypeIcon {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+}
+
+.promotionTypeCard h4 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.25rem 0;
+}
+
+.promotionTypeCard p {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0 0 0.5rem 0;
+}
+
+.promotionTypeHint {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 28px;
+  height: 28px;
+  background: #11998e;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+/* ============================================
+   FILTERS STEP
+   ============================================ */
+
+.filterGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formGroup label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.formGroup input,
+.formGroup select {
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #2d3748;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.formGroup input:focus,
+.formGroup select:focus {
+  outline: none;
+  border-color: #11998e;
+  box-shadow: 0 0 0 3px rgba(17, 153, 142, 0.1);
+}
+
+.formGroup input:disabled,
+.formGroup select:disabled {
+  background: #f7fafc;
+  cursor: not-allowed;
+  color: #a0aec0;
+}
+
+/* ============================================
+   PROMOTION INFO BOX
+   ============================================ */
+
+.promotionInfoBox {
+  display: flex;
+  gap: 1rem;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+}
+
+.promotionInfoIcon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.promotionInfoContent {
+  font-size: 0.875rem;
+  color: #1e40af;
+}
+
+.promotionInfoContent strong {
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.promotionInfoList {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.25rem;
+}
+
+.promotionInfoList li {
+  margin-bottom: 0.25rem;
+}
+
+/* ============================================
+   STUDENT INFO CARD (Single Promotion)
+   ============================================ */
+
+.studentInfoCard {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.studentInfoHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.studentInfoAvatar {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+}
+
+.studentInfoName {
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 1rem;
+}
+
+.studentInfoId {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.studentInfoDetails {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.studentInfoDetails .label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  display: block;
+}
+
+.studentInfoDetails .value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* ============================================
+   WARNING BOX
+   ============================================ */
+
+.warningBox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #fef9c3;
+  border-left: 4px solid #eab308;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #854d0e;
+}
+
+.warningBox svg {
+  flex-shrink: 0;
+  color: #eab308;
+  margin-top: 0.125rem;
+}
+
+.warningBox strong {
+  display: block;
+}
+
+.dangerWarning {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  background: #fee2e2;
+  border-left: 4px solid #ef4444;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #991b1b;
+}
+
+.dangerWarning svg {
+  flex-shrink: 0;
+  color: #ef4444;
+  margin-top: 0.125rem;
+}
+
+/* ============================================
+   REVIEW STEP
+   ============================================ */
+
+.reviewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.progressInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 200px;
+}
+
+.progressText {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-align: right;
+}
+
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* Review Actions */
+.reviewActions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.reviewActionButton {
+  padding: 0.5rem 1.25rem;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reviewActionButton:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(17, 153, 142, 0.3);
+}
+
+.reviewActionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.reviewActionButtonSecondary {
+  padding: 0.5rem 1.25rem;
+  background: #e2e8f0;
+  color: #4a5568;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reviewActionButtonSecondary:hover:not(:disabled) {
+  background: #cbd5e0;
+}
+
+.reviewActionButtonSecondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Review Table */
+.studentReviewTable {
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.reviewTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.reviewTable th {
+  background: #f8fafc;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #64748b;
+  border-bottom: 1px solid #e2e8f0;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+}
+
+.reviewTable td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.reviewTable tbody tr:hover {
+  background: #f8fafc;
+}
+
+.reviewTable .disabledRow {
+  opacity: 0.6;
+}
+
+/* Action buttons in review */
+.actionButtons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #1e293b;
+  cursor: pointer;
+}
+
+.checkboxLabel input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #11998e;
+}
+
+.actionButton {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+  color: #4a5568;
+}
+
+.actionButton:hover {
+  background: #f1f5f9;
+}
+
+.activeRetain {
+  background: #fed7aa;
+  border-color: #f97316;
+  color: #9a3412;
+}
+
+.activeGraduate {
+  background: #d1fae5;
+  border-color: #10b981;
+  color: #065f46;
+}
+
+.alreadyPromotedText {
+  font-size: 0.75rem;
+  color: #10b981;
+  font-weight: 600;
+}
+
+/* Review Footer */
+.reviewFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.reviewSummary {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.summaryPending {
+  color: #92400e;
+}
+
+.summaryPromoted {
+  color: #1e40af;
+}
+
+.summaryRetained {
+  color: #9a3412;
+}
+
+.summaryGraduated {
+  color: #065f46;
+}
+
+.reviewNavigation {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.navButton {
+  padding: 0.5rem 1.25rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.navButton:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #cbd5e0;
+}
+
+.navButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   CONFIRM STEP
+   ============================================ */
+
+.confirmSummary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.confirmCard {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.confirmIcon {
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+.confirmLabel {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.confirmValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0.25rem 0;
+}
+
+.confirmSub {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.confirmDetails {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.confirmDetails h4 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.75rem 0;
+}
+
+.confirmDetailsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.confirmDetailsGrid .label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  display: block;
+}
+
+.confirmDetailsGrid .value {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* ============================================
+   RESULTS STEP
+   ============================================ */
+
+.resultSummary {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.75rem;
+}
+
+.resultCard {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1rem;
+  text-align: center;
+}
+
+.resultError {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.resultLabel {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.resultValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-top: 0.25rem;
+}
+
+.resultError .resultValue {
+  color: #dc2626;
+}
+
+.errorList {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.errorList h4 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #991b1b;
+  margin: 0 0 0.5rem 0;
+}
+
+.errorList ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.875rem;
+  color: #991b1b;
+}
+
+.resultActions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.primaryButton {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.primaryButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(17, 153, 142, 0.3);
+}
+
+.primaryButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.secondaryButton {
+  padding: 0.75rem 1.5rem;
+  background: white;
+  color: #4a5568;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.secondaryButton:hover:not(:disabled) {
+  background: #f7fafc;
+  border-color: #cbd5e0;
+}
+
+.secondaryButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.dangerButton {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.dangerButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+.dangerButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+
+.emptyState {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #64748b;
+}
+
+.emptyState p {
+  font-size: 0.875rem;
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.emptyState h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   HISTORY TABLE
+   ============================================ */
+
+.historyTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.historyTable th {
+  background: #f8fafc;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #64748b;
+  border-bottom: 2px solid #e2e8f0;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.5px;
+}
+
+.historyTable td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.historyTable tbody tr:hover {
+  background: #f8fafc;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .filterRow {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .confirmSummary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .resultSummary {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .studentInfoDetails {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .confirmDetailsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .contentWrapper {
+    padding: 1rem;
+  }
+
+  .filterRow {
+    grid-template-columns: 1fr;
+  }
+
+  .filterGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .promotionTypeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal {
+    max-width: 100%;
+    margin: 1rem;
+    max-height: 95vh;
+  }
+
+  .modalHeader {
+    padding: 1rem 1.25rem;
+  }
+
+  .modalHeader h2 {
+    font-size: 1rem;
+  }
+
+  .modalBody {
+    padding: 1.25rem;
+    max-height: calc(95vh - 160px);
+  }
+
+  .modalFooter {
+    padding: 1rem 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .modalFooter button {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .confirmSummary {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .resultSummary {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .studentInfoDetails {
+    grid-template-columns: 1fr;
+  }
+
+  .confirmDetailsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .reviewHeader {
+    flex-direction: column;
+  }
+
+  .progressInfo {
+    width: 100%;
+  }
+
+  .reviewFooter {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .reviewSummary {
+    justify-content: center;
+  }
+
+  .reviewNavigation {
+    justify-content: center;
+  }
+
+  .actionButtons {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .headerActions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .headerActions button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .reviewTable {
+    font-size: 0.75rem;
+  }
+
+  .reviewTable th,
+  .reviewTable td {
+    padding: 0.5rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .confirmSummary {
+    grid-template-columns: 1fr;
+  }
+
+  .resultSummary {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .promotionTypeCard {
+    padding: 1.5rem 1rem;
+  }
+
+  .modalBody {
+    padding: 1rem;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
+@media print {
+  .pageContainer {
+    background: white;
+    padding: 0;
+  }
+
+  .modalOverlay {
+    display: none !important;
+  }
+
+  .promoteButton,
+  .historyButton {
+    display: none !important;
+  }
+
+  .filterSection {
+    box-shadow: none;
+    border: 1px solid #e2e8f0;
+  }
+
+  .tableSection {
+    box-shadow: none;
+    border: 1px solid #e2e8f0;
+  }
+}
+
+
+/* Add to page.module.css */
+
+/* History Modal */
+.historyModal {
+  max-width: 1100px;
+}
+
+.historyFilters {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.filterInput {
+  padding: 0.5rem 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #2d3748;
+  background: white;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.filterInput:focus {
+  outline: none;
+  border-color: #11998e;
+  box-shadow: 0 0 0 3px rgba(17, 153, 142, 0.1);
+}
+
+.filterActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.primaryButtonSmall {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.primaryButtonSmall:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(17, 153, 142, 0.3);
+}
+
+.secondaryButtonSmall {
+  padding: 0.5rem 1rem;
+  background: #e2e8f0;
+  color: #4a5568;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.secondaryButtonSmall:hover {
+  background: #cbd5e0;
+}
+
+.historyTableWrapper {
+  overflow-x: auto;
+}
+
+.totalRecords {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.exportButton {
+  padding: 0.5rem 1.25rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.exportButton:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.footerLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footerRight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Status Deferred */
+.statusDeferred {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+/* Active Defer button */
+.activeDefer {
+  background: #e0e7ff;
+  border-color: #6366f1;
+  color: #3730a3;
+}
+
+/* Summary Deferred */
+.summaryDeferred {
+  color: #3730a3;
+  font-weight: 600;
+}
+
+/* Empty Class Message */
+.emptyClassMessage {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 2px dashed #e2e8f0;
+}
+
+.emptyClassMessage p {
+  color: #64748b;
+  font-size: 0.875rem;
+  margin: 0.25rem 0;
+}
+
+.emptyClassMessage .emptyClassSub {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin-top: 0.5rem;
+}

@@ -32,7 +32,7 @@ interface StatItem {
 interface StatsProps {
   stats?: StatItem[];
   variant?: "default" | "compact" | "detailed" | "cards";
-  columns?: 2 | 3 | 4 | 6;
+  columns?: 2 | 3 | 4 | 5|6;
   showTrend?: boolean;
   showIcon?: boolean;
   size?: "sm" | "md" | "lg";

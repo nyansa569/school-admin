@@ -1,0 +1,59 @@
+/* components/LogoutButton/LogoutButton.module.css */
+.logoutButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logoutButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+/* Variants */
+.primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.primary:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.secondary {
+  background: #64748b;
+  color: white;
+}
+
+.secondary:hover:not(:disabled) {
+  background: #475569;
+}
+
+.danger {
+  background: #ef4444;
+  color: white;
+}
+
+.danger:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.text {
+  background: transparent;
+  color: #ef4444;
+}
+
+.text:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.1);
+}

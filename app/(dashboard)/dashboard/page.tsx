@@ -1,350 +1,388 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { 
+  getDashboardStats, 
+  getRecentActivities, 
+  getUpcomingEvents,
+  getFeeCollectionTrend,
+  getEnrollmentTrend,
+  getClassPerformanceSummary,
+  getTeacherWorkloadSummary
+} from "@/lib/action/admin/dashboard";
 import styles from "./page.module.css";
 
-// Mock data for dashboard
-const statsData = [
-  {
-    id: 1,
-    title: "Total Students",
-    value: "2,456",
-    change: "+12.5%",
-    trend: "up",
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a23.54 23.54 0 0 0-2.688 6.352A48.596 48.596 0 0 1 12 20.904a48.596 48.596 0 0 1 8.399-4.405 23.54 23.54 0 0 0-2.688-6.352M12 2.25l9.75 5.625-9.75 5.625L2.25 7.875 12 2.25Z" />
-      </svg>
-    ),
-    bgColor: "#e0f2fe",
-    iconColor: "#0284c7"
-  },
-  {
-    id: 2,
-    title: "Total Staff",
-    value: "128",
-    change: "+4.2%",
-    trend: "up",
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
-      </svg>
-    ),
-    bgColor: "#dbeafe",
-    iconColor: "#2563eb"
-  },
-  {
-    id: 3,
-    title: "Total Classes",
-    value: "48",
-    change: "+2",
-    trend: "up",
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
-      </svg>
-    ),
-    bgColor: "#fef3c7",
-    iconColor: "#d97706"
-  },
-  {
-    id: 4,
-    title: "Revenue (MTD)",
-    value: "$245K",
-    change: "+18.3%",
-    trend: "up",
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-      </svg>
-    ),
-    bgColor: "#dcfce7",
-    iconColor: "#16a34a"
-  },
-];
+// SVG Icons
+const StudentsIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 6C13.6569 6 15 7.34315 15 9C15 10.6569 13.6569 12 12 12C10.3431 12 9 10.6569 9 9C9 7.34315 10.3431 6 12 6Z" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M20 21C20 17.134 16.4183 14 12 14C7.58172 14 4 17.134 4 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>
+);
 
-const recentActivities = [
-  {
-    id: 1,
-    user: "John Smith",
-    action: "enrolled in",
-    target: "Grade 10A",
-    time: "5 minutes ago",
-    avatar: "JS",
-    type: "enrollment"
-  },
-  {
-    id: 2,
-    user: "Sarah Johnson",
-    action: "submitted assignment",
-    target: "Mathematics",
-    time: "15 minutes ago",
-    avatar: "SJ",
-    type: "submission"
-  },
-  {
-    id: 3,
-    user: "Michael Chen",
-    action: "requested leave",
-    target: "Medical leave",
-    time: "1 hour ago",
-    avatar: "MC",
-    type: "leave"
-  },
-  {
-    id: 4,
-    user: "Emily Rodriguez",
-    action: "scheduled meeting with",
-    target: "Parents",
-    time: "2 hours ago",
-    avatar: "ER",
-    type: "meeting"
-  },
-  {
-    id: 5,
-    user: "David Thompson",
-    action: "updated grades for",
-    target: "Science Club",
-    time: "3 hours ago",
-    avatar: "DT",
-    type: "grade"
-  },
-];
+const StaffIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17 21V19C17 16.8 15.2 15 13 15H5C2.8 15 1 16.8 1 19V21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <circle cx="9" cy="7" r="4" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M23 21V19C22.9 16.7 21.1 15 18.9 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M16 3.13C18.1 3.53 19.7 5.4 19.7 7.5C19.7 9.6 18.1 11.5 16 11.9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>
+);
 
-const upcomingEvents = [
-  {
-    id: 1,
-    title: "Parent-Teacher Meeting",
-    date: "Mar 15, 2024",
-    time: "10:00 AM - 2:00 PM",
-    location: "Main Auditorium"
-  },
-  {
-    id: 2,
-    title: "Science Fair",
-    date: "Mar 20, 2024",
-    time: "9:00 AM - 4:00 PM",
-    location: "Exhibition Hall"
-  },
-  {
-    id: 3,
-    title: "Staff Development Day",
-    date: "Mar 25, 2024",
-    time: "8:30 AM - 3:30 PM",
-    location: "Conference Room"
-  },
-  {
-    id: 4,
-    title: "Sports Day",
-    date: "Apr 5, 2024",
-    time: "8:00 AM - 5:00 PM",
-    location: "Sports Complex"
-  },
-];
+const MoneyIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2V4M12 20V22M4 12H2M6.31412 6.31412L4.8999 4.8999M17.6859 6.31412L19.1001 4.8999M6.31412 17.69L4.8999 19.1042M17.6859 17.69L19.1001 19.1042M22 12H20M4.5 16.5C5.5 17.5 6.5 18 8 18C10 18 11 16 12 15C13 14 14 12 16 12C17.5 12 18.5 12.5 19.5 13.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <path d="M12 8C13.1046 8 14 8.89543 14 10C14 11.1046 13.1046 12 12 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
 
-const attendanceData = [
-  { className: "Grade 10A", percentage: 95 },
-  { className: "Grade 10B", percentage: 88 },
-  { className: "Grade 9A", percentage: 92 },
-  { className: "Grade 9B", percentage: 85 },
-  { className: "Grade 8A", percentage: 96 },
-  { className: "Grade 8B", percentage: 90 },
-];
+const CalendarIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="1.5" />
+    <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" strokeWidth="1.5" />
+    <circle cx="12" cy="15" r="1" fill="currentColor" />
+    <circle cx="16" cy="15" r="1" fill="currentColor" />
+    <circle cx="8" cy="15" r="1" fill="currentColor" />
+  </svg>
+);
 
-export default function Dashboard() {
-  const [selectedPeriod, setSelectedPeriod] = useState("weekly");
+const TrendingUpIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M23 6L13.5 15.5L8.5 10.5L1 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M17 6H23V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+export default function AdminDashboard() {
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<any>(null);
+  const [activities, setActivities] = useState<any[]>([]);
+  const [events, setEvents] = useState<any[]>([]);
+  const [feeTrend, setFeeTrend] = useState<any[]>([]);
+  const [enrollmentTrend, setEnrollmentTrend] = useState<any[]>([]);
+  const [classPerformance, setClassPerformance] = useState<any[]>([]);
+  const [teacherWorkload, setTeacherWorkload] = useState<any[]>([]);
+
+  useEffect(() => {
+    loadDashboardData();
+  }, []);
+
+  const loadDashboardData = async () => {
+    setLoading(true);
+    
+    const [statsResult, activitiesResult, eventsResult, feeTrendResult, enrollmentTrendResult, classPerfResult, teacherWorkloadResult] = await Promise.all([
+      getDashboardStats(),
+      getRecentActivities(6),
+      getUpcomingEvents(5),
+      getFeeCollectionTrend(),
+      getEnrollmentTrend(),
+      getClassPerformanceSummary(),
+      getTeacherWorkloadSummary(),
+    ]);
+
+    if (statsResult.stats) setStats(statsResult.stats);
+    if (activitiesResult.activities) setActivities(activitiesResult.activities);
+    if (eventsResult.events) setEvents(eventsResult.events);
+    if (feeTrendResult.data) setFeeTrend(feeTrendResult.data);
+    if (enrollmentTrendResult.data) setEnrollmentTrend(enrollmentTrendResult.data);
+    if (classPerfResult.data) setClassPerformance(classPerfResult.data);
+    if (teacherWorkloadResult.data) setTeacherWorkload(teacherWorkloadResult.data);
+
+    setLoading(false);
+  };
+
+  const statCards = [
+    {
+      title: "Total Students",
+      value: stats?.totalStudents || 0,
+      icon: <StudentsIcon />,
+      color: "#0f5c3f",
+      bgColor: "#d1fae5",
+      trend: "+12%",
+    },
+    {
+      title: "Total Staff",
+      value: stats?.totalStaff || 0,
+      icon: <StaffIcon />,
+      color: "#d4a529",
+      bgColor: "#fef3c7",
+      trend: "+5%",
+    },
+    {
+      title: "Total Revenue",
+      value: `GHS ${(stats?.totalFeesCollected || 0).toLocaleString()}`,
+      icon: <MoneyIcon />,
+      color: "#0f5c3f",
+      bgColor: "#d1fae5",
+      trend: "+18%",
+    },
+    {
+      title: "Attendance Rate",
+      value: `${stats?.attendanceRate || 0}%`,
+      icon: <CalendarIcon />,
+      color: "#d4a529",
+      bgColor: "#fef3c7",
+      trend: "+3%",
+    },
+  ];
 
   return (
     <div className={styles.dashboard}>
-      <div className={styles.container}>
-        {/* Header */}
-        <div className={styles.header}>
-          <div>
-            <h1 className={styles.pageTitle}>Dashboard</h1>
-            <p className={styles.pageSubtitle}>Welcome back, Admin User! Here's what's happening today.</p>
-          </div>
-          <div className={styles.headerActions}>
-            <div className={styles.periodSelector}>
-              <button
-                className={`${styles.periodButton} ${selectedPeriod === "daily" ? styles.activePeriod : ""}`}
-                onClick={() => setSelectedPeriod("daily")}
-              >
-                Daily
-              </button>
-              <button
-                className={`${styles.periodButton} ${selectedPeriod === "weekly" ? styles.activePeriod : ""}`}
-                onClick={() => setSelectedPeriod("weekly")}
-              >
-                Weekly
-              </button>
-              <button
-                className={`${styles.periodButton} ${selectedPeriod === "monthly" ? styles.activePeriod : ""}`}
-                onClick={() => setSelectedPeriod("monthly")}
-              >
-                Monthly
-              </button>
-            </div>
-            <button className={styles.refreshButton}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-              </svg>
-              Refresh
-            </button>
-          </div>
+      {/* Header */}
+      <div className={styles.header}>
+        <div>
+          <h1 className={styles.title}>Dashboard</h1>
+          <p className={styles.subtitle}>Welcome back! Here's what's happening at Kiddiewise School Complex today.</p>
         </div>
-
-        {/* Stats Grid */}
-        <div className={styles.statsGrid}>
-          {statsData.map((stat) => (
-            <div key={stat.id} className={styles.statCard}>
-              <div className={styles.statHeader}>
-                <div 
-                  className={styles.statIcon}
-                  style={{ backgroundColor: stat.bgColor, color: stat.iconColor }}
-                >
-                  {stat.icon}
-                </div>
-                <span className={`${styles.statTrend} ${styles[stat.trend]}`}>
-                  {stat.change}
-                </span>
-              </div>
-              <div className={styles.statContent}>
-                <h3 className={styles.statTitle}>{stat.title}</h3>
-                <p className={styles.statValue}>{stat.value}</p>
-              </div>
-            </div>
-          ))}
+        <div className={styles.headerActions}>
+          <button className={styles.exportBtn}>
+            <TrendingUpIcon />
+            Export Report
+          </button>
         </div>
+      </div>
 
-        {/* Charts Section */}
-        <div className={styles.chartsSection}>
-          <div className={styles.chartCard}>
-            <div className={styles.chartHeader}>
-              <h3 className={styles.chartTitle}>Attendance Overview</h3>
-              <select className={styles.chartSelect}>
-                <option>This Week</option>
-                <option>This Month</option>
-                <option>This Term</option>
-              </select>
+      {/* Stats Grid */}
+      <div className={styles.statsGrid}>
+        {statCards.map((stat, index) => (
+          <div key={index} className={styles.statCard}>
+            <div className={styles.statIcon} style={{ backgroundColor: stat.bgColor, color: stat.color }}>
+              {stat.icon}
             </div>
-            <div className={styles.attendanceList}>
-              {attendanceData.map((item, index) => (
-                <div key={index} className={styles.attendanceItem}>
-                  <span className={styles.attendanceClass}>{item.className}</span>
-                  <div className={styles.attendanceBarContainer}>
-                    <div 
-                      className={styles.attendanceBar}
-                      style={{ width: `${item.percentage}%` }}
-                    ></div>
+            <div className={styles.statInfo}>
+              <span className={styles.statTitle}>{stat.title}</span>
+              <span className={styles.statValue}>{stat.value}</span>
+              <span className={styles.statTrend}>
+                <TrendingUpIcon />
+                {stat.trend} from last month
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Charts Row */}
+      <div className={styles.chartsRow}>
+        {/* Fee Collection Chart */}
+        <div className={styles.chartCard}>
+          <div className={styles.chartHeader}>
+            <h3>Fee Collection Trend</h3>
+            <span className={styles.chartSubtitle}>Monthly revenue (GHS)</span>
+          </div>
+          <div className={styles.chartContainer}>
+            {feeTrend.length > 0 ? (
+              <div className={styles.barChart}>
+                {feeTrend.map((item, index) => (
+                  <div key={index} className={styles.barItem}>
+                    <div className={styles.barLabel}>{item.month}</div>
+                    <div className={styles.barWrapper}>
+                      <div 
+                        className={styles.bar} 
+                        style={{ 
+                          height: `${Math.min(100, (item.amount / Math.max(...feeTrend.map(t => t.amount), 1)) * 60)}px`,
+                          backgroundColor: "#0f5c3f"
+                        }}
+                      />
+                    </div>
+                    <div className={styles.barValue}>{item.amount.toLocaleString()}</div>
                   </div>
-                  <span className={styles.attendancePercentage}>{item.percentage}%</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className={styles.chartCard}>
-            <div className={styles.chartHeader}>
-              <h3 className={styles.chartTitle}>Quick Actions</h3>
-            </div>
-            <div className={styles.quickActions}>
-              <button className={styles.quickAction}>
-                <div className={styles.quickActionIcon}>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
-                  </svg>
-                </div>
-                <span>Add Student</span>
-              </button>
-              <button className={styles.quickAction}>
-                <div className={styles.quickActionIcon}>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM4 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 10.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
-                  </svg>
-                </div>
-                <span>Add Teacher</span>
-              </button>
-              <button className={styles.quickAction}>
-                <div className={styles.quickActionIcon}>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                  </svg>
-                </div>
-                <span>Schedule Event</span>
-              </button>
-              <button className={styles.quickAction}>
-                <div className={styles.quickActionIcon}>
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
-                  </svg>
-                </div>
-                <span>Send Notice</span>
-              </button>
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className={styles.noData}>No fee data available</div>
+            )}
           </div>
         </div>
 
-        {/* Activities and Events */}
-        <div className={styles.activitySection}>
-          {/* Recent Activities */}
-          <div className={styles.activityCard}>
-            <div className={styles.activityHeader}>
-              <h3 className={styles.activityTitle}>Recent Activities</h3>
-              <a href="#" className={styles.viewAllLink}>View All</a>
-            </div>
-            <div className={styles.activityList}>
-              {recentActivities.map((activity) => (
+        {/* Enrollment Trend Chart */}
+        <div className={styles.chartCard}>
+          <div className={styles.chartHeader}>
+            <h3>Enrollment Trend</h3>
+            <span className={styles.chartSubtitle}>Students enrolled per month</span>
+          </div>
+          <div className={styles.chartContainer}>
+            {enrollmentTrend.length > 0 ? (
+              <div className={styles.lineChart}>
+                <svg viewBox="0 0 500 200" className={styles.chartSvg}>
+                  <polyline
+                    points={enrollmentTrend.map((item, index) => 
+                      `${(index / (enrollmentTrend.length - 1)) * 500},${200 - (item.count / Math.max(...enrollmentTrend.map(t => t.count), 1)) * 180}`
+                    ).join(" ")}
+                    fill="none"
+                    stroke="#d4a529"
+                    strokeWidth="2"
+                  />
+                  {enrollmentTrend.map((item, index) => (
+                    <circle
+                      key={index}
+                      cx={(index / (enrollmentTrend.length - 1)) * 500}
+                      cy={200 - (item.count / Math.max(...enrollmentTrend.map(t => t.count), 1)) * 180}
+                      r="4"
+                      fill="#0f5c3f"
+                    />
+                  ))}
+                </svg>
+                <div className={styles.chartLabels}>
+                  {enrollmentTrend.map((item, index) => (
+                    <span key={index} className={styles.chartLabel}>{item.month}</span>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className={styles.noData}>No enrollment data available</div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Two Column Layout */}
+      <div className={styles.twoColumn}>
+        {/* Recent Activities */}
+        <div className={styles.activityCard}>
+          <div className={styles.cardHeader}>
+            <h3>Recent Activities</h3>
+            <button className={styles.viewAllBtn}>View All</button>
+          </div>
+          <div className={styles.activityList}>
+            {activities.length > 0 ? (
+              activities.map((activity) => (
                 <div key={activity.id} className={styles.activityItem}>
-                  <div className={`${styles.activityAvatar} ${styles[activity.type]}`}>
-                    {activity.avatar}
-                  </div>
+                  <div className={styles.activityIcon}>{activity.icon}</div>
                   <div className={styles.activityContent}>
-                    <p className={styles.activityText}>
-                      <span className={styles.activityUser}>{activity.user}</span>{" "}
-                      {activity.action}{" "}
-                      <span className={styles.activityTarget}>{activity.target}</span>
-                    </p>
-                    <span className={styles.activityTime}>{activity.time}</span>
+                    <div className={styles.activityTitle}>{activity.title}</div>
+                    <div className={styles.activityDescription}>{activity.description}</div>
+                    <div className={styles.activityTime}>
+                      {new Date(activity.date).toLocaleDateString()}
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              ))
+            ) : (
+              <div className={styles.noData}>No recent activities</div>
+            )}
           </div>
+        </div>
 
-          {/* Upcoming Events */}
-          <div className={styles.activityCard}>
-            <div className={styles.activityHeader}>
-              <h3 className={styles.activityTitle}>Upcoming Events</h3>
-              <a href="#" className={styles.viewAllLink}>View All</a>
-            </div>
-            <div className={styles.eventList}>
-              {upcomingEvents.map((event) => (
+        {/* Upcoming Events */}
+        <div className={styles.eventsCard}>
+          <div className={styles.cardHeader}>
+            <h3>Upcoming Events</h3>
+            <button className={styles.viewAllBtn}>View Calendar</button>
+          </div>
+          <div className={styles.eventsList}>
+            {events.length > 0 ? (
+              events.map((event) => (
                 <div key={event.id} className={styles.eventItem}>
                   <div className={styles.eventDate}>
-                    <span className={styles.eventMonth}>{event.date.split(' ')[0]}</span>
-                    <span className={styles.eventDay}>{event.date.split(' ')[1].replace(',', '')}</span>
+                    <span className={styles.eventDay}>{new Date(event.date).getDate()}</span>
+                    <span className={styles.eventMonth}>
+                      {new Date(event.date).toLocaleString('default', { month: 'short' })}
+                    </span>
                   </div>
                   <div className={styles.eventContent}>
-                    <h4 className={styles.eventTitle}>{event.title}</h4>
-                    <p className={styles.eventDetails}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6l4 2" />
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707" />
-                      </svg>
-                      {event.time}
-                    </p>
-                    <p className={styles.eventDetails}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                      </svg>
-                      {event.location}
-                    </p>
+                    <div className={styles.eventTitle}>{event.title}</div>
+                    {event.description && (
+                      <div className={styles.eventDescription}>{event.description}</div>
+                    )}
+                    <div className={`${styles.eventType} ${styles[event.type]}`}>
+                      {event.type}
+                    </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              ))
+            ) : (
+              <div className={styles.noData}>No upcoming events</div>
+            )}
           </div>
+        </div>
+      </div>
+
+      {/* Class Performance Table */}
+      <div className={styles.tableCard}>
+        <div className={styles.cardHeader}>
+          <h3>Class Performance Overview</h3>
+          <button className={styles.viewAllBtn}>View Details</button>
+        </div>
+        <div className={styles.tableWrapper}>
+          <table className={styles.dataTable}>
+            <thead>
+              <tr>
+                <th>Class Name</th>
+                <th>Level</th>
+                <th>Students</th>
+                <th>Average Score</th>
+                <th>Performance</th>
+              </tr>
+            </thead>
+            <tbody>
+              {classPerformance.length > 0 ? (
+                classPerformance.map((classItem) => (
+                  <tr key={classItem.class_id}>
+                    <td className={styles.className}>{classItem.class_name}</td>
+                    <td>{classItem.level}</td>
+                    <td>{classItem.student_count}</td>
+                    <td>{classItem.average_score}%</td>
+                    <td>
+                      <div className={styles.progressBar}>
+                        <div 
+                          className={styles.progressFill} 
+                          style={{ width: `${classItem.average_score}%` }}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className={styles.noData}>No class performance data</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Teacher Workload Table */}
+      <div className={styles.tableCard}>
+        <div className={styles.cardHeader}>
+          <h3>Teacher Workload Summary</h3>
+          <button className={styles.viewAllBtn}>View All</button>
+        </div>
+        <div className={styles.tableWrapper}>
+          <table className={styles.dataTable}>
+            <thead>
+              <tr>
+                <th>Teacher Name</th>
+                <th>Email</th>
+                <th>Classes</th>
+                <th>Subjects</th>
+                <th>Students</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {teacherWorkload.length > 0 ? (
+                teacherWorkload.map((teacher) => (
+                  <tr key={teacher.id}>
+                    <td className={styles.teacherName}>{teacher.name}</td>
+                    <td>{teacher.email}</td>
+                    <td>{teacher.total_classes}</td>
+                    <td>{teacher.total_subjects}</td>
+                    <td>{teacher.total_students}</td>
+                    <td>
+                      <span className={styles.statusBadge}>Active</span>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={6} className={styles.noData}>No teacher workload data</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

@@ -1,0 +1,155 @@
+/* app/parent/children/component/ChildCard.module.css */
+
+.card {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.avatarSection {
+  background: linear-gradient(135deg, #6A1B2A 0%, #5a1524 100%);
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: white;
+}
+
+.statusBadge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.statusActive {
+  background: #10b981;
+  color: white;
+}
+
+.statusInactive {
+  background: #ef4444;
+  color: white;
+}
+
+.statusGraduated {
+  background: #f59e0b;
+  color: white;
+}
+
+.infoSection {
+  padding: 20px;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+}
+
+.studentId {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0 0 2px 0;
+}
+
+.admissionNo {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0 0 16px 0;
+}
+
+.details {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.detailItem {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 4px 0;
+}
+
+.detailItem:first-child {
+  margin-bottom: 4px;
+}
+
+.detailLabel {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.detailValue {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.viewBtn {
+  width: 100%;
+  padding: 10px;
+  background: #6A1B2A;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.viewBtn:hover {
+  background: #5a1524;
+}
+
+.viewBtn svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 768px) {
+  .avatarSection {
+    padding: 20px;
+  }
+  
+  .avatar {
+    width: 56px;
+    height: 56px;
+    font-size: 20px;
+  }
+  
+  .infoSection {
+    padding: 16px;
+  }
+  
+  .name {
+    font-size: 16px;
+  }
+}
