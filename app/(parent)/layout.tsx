@@ -8,19 +8,19 @@ export default async function ParentLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getSession();
+  // const session = await getSession();
 
-  if (!session) {
-    redirect("/auth/login");
-  }
+  // if (!session) {
+  //   redirect("/auth/login");
+  // }
 
-  if (session.user.role === "admin") {
-    redirect("/dashboard");
-  }
+  // if (session.user.role === "admin") {
+  //   redirect("/dashboard");
+  // }
 
-  if (session.user.role !== "parent") {
-    redirect("/auth/login");
-  }
+  // if (session.user.role !== "parent") {
+  //   redirect("/auth/login");
+  // }
 
   return <ParentLayoutClient>{children}</ParentLayoutClient>;
 }
