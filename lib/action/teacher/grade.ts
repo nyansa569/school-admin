@@ -75,6 +75,9 @@ export async function checkTeacherAuthorization(
     .eq("status", "active")
     .is("deleted_at", null);
 
+    console.log("Authorization query built", { classId, subjectId, teacherId, academicYearId, termId });
+    console.log("Query conditions", query);
+
   if (academicYearId) {
     query = query.eq("academic_year_id", academicYearId);
   }

@@ -89,13 +89,14 @@ const ClassesAdminPage = () => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<{ id: number; type: string } | null>(null);
 
-  // Assignment modal
+  // Assignment modal - ADDED term_id
   const [showAssignmentModal, setShowAssignmentModal] = useState(false);
   const [assignmentForm, setAssignmentForm] = useState({
     teacher_id: "",
     subject_id: "",
     class_id: "",
     academic_year_id: "",
+    term_id: "", // ADDED: term_id field
   });
 
   // Class Subject modal
@@ -232,6 +233,14 @@ const ClassesAdminPage = () => {
   };
 
   const loadTermsForClassSubject = async (academicYearId: number) => {
+    const result = await getAvailableTerms(academicYearId);
+    if (result.terms) {
+      setAvailableTerms(result.terms);
+    }
+  };
+
+  // Load terms for assignment modal
+  const loadTermsForAssignment = async (academicYearId: number) => {
     const result = await getAvailableTerms(academicYearId);
     if (result.terms) {
       setAvailableTerms(result.terms);
@@ -897,14 +906,19 @@ const ClassesAdminPage = () => {
     setIsSubmitting(false);
   };
 
-  // Assignment operations
+  // ============================================
+  // ASSIGNMENT OPERATIONS - UPDATED WITH TERM
+  // ============================================
+
   const handleOpenAssignmentModal = () => {
     setAssignmentForm({
       teacher_id: "",
       subject_id: "",
       class_id: "",
       academic_year_id: "",
+      term_id: "", // ADDED
     });
+    setAvailableTerms([]);
     setShowAssignmentModal(true);
   };
 
@@ -918,11 +932,30 @@ const ClassesAdminPage = () => {
       return;
     }
 
+    if (!assignmentForm.academic_year_id) {
+      alert("Please select an academic year");
+      setIsSubmitting(false);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("teacher_id", assignmentForm.teacher_id);
     formData.append("subject_id", assignmentForm.subject_id);
     formData.append("class_id", assignmentForm.class_id);
-    if (assignmentForm.academic_year_id) formData.append("academic_year_id", assignmentForm.academic_year_id);
+    formData.append("academic_year_id", assignmentForm.academic_year_id);
+    
+    // ADDED: Append term_id if selected
+    if (assignmentForm.term_id) {
+      formData.append("term_id", assignmentForm.term_id);
+    }
+
+    console.log("Submitting assignment with data:", {
+      teacher_id: assignmentForm.teacher_id,
+      subject_id: assignmentForm.subject_id,
+      class_id: assignmentForm.class_id,
+      academic_year_id: assignmentForm.academic_year_id,
+      term_id: assignmentForm.term_id || "none",
+    });
 
     const result = await assignTeacherToSubjectClass(formData);
     if (result?.success) {
@@ -943,7 +976,10 @@ const ClassesAdminPage = () => {
     }
   };
 
-  // Class Subject operations
+  // ============================================
+  // CLASS SUBJECT OPERATIONS
+  // ============================================
+
   const handleOpenClassSubjectModal = () => {
     setClassSubjectForm({
       class_id: "",
@@ -966,6 +1002,15 @@ const ClassesAdminPage = () => {
       setIsSubmitting(false);
       return;
     }
+
+    console.log("Submitting class subject with data:", {
+      class_id: classSubjectForm.class_id,
+      subject_id: classSubjectForm.subject_id,
+      academic_year_id: classSubjectForm.academic_year_id,
+      term_id: classSubjectForm.term_id || "none",
+      is_mandatory: classSubjectForm.is_mandatory,
+      weekly_hours: classSubjectForm.weekly_hours,
+    });
 
     const result = await assignSubjectToClass(
       parseInt(classSubjectForm.class_id),
@@ -1523,7 +1568,9 @@ const ClassesAdminPage = () => {
         )}
       </div>
 
-      {/* Assignment Modal */}
+      {/* ============================================ */}
+      {/* ASSIGNMENT MODAL - UPDATED WITH TERM FIELD */}
+      {/* ============================================ */}
       {showAssignmentModal && (
         <div className={styles.modalOverlay} onClick={() => setShowAssignmentModal(false)}>
           <div className={`${styles.modal} ${styles.largeModal}`} onClick={(e) => e.stopPropagation()}>
@@ -1537,39 +1584,100 @@ const ClassesAdminPage = () => {
               <div className={styles.modalBody}>
                 <div className={styles.formSection}>
                   <h3 className={styles.sectionTitle}>Assignment Details</h3>
+                  
                   <div className={styles.formGroup}>
                     <label>Teacher *</label>
-                    <select value={assignmentForm.teacher_id} onChange={(e) => setAssignmentForm({ ...assignmentForm, teacher_id: e.target.value })} required disabled={loadingDropdowns}>
+                    <select 
+                      value={assignmentForm.teacher_id} 
+                      onChange={(e) => setAssignmentForm({ ...assignmentForm, teacher_id: e.target.value })} 
+                      required 
+                      disabled={loadingDropdowns}
+                    >
                       <option value="">Select Teacher</option>
-                      {teachers.map((t) => (<option key={t.id} value={t.id}>{t.first_name} {t.last_name}</option>))}
+                      {teachers.map((t) => (
+                        <option key={t.id} value={t.id}>{t.first_name} {t.last_name}</option>
+                      ))}
                     </select>
                   </div>
+
                   <div className={styles.formGroup}>
                     <label>Subject *</label>
-                    <select value={assignmentForm.subject_id} onChange={(e) => setAssignmentForm({ ...assignmentForm, subject_id: e.target.value })} required disabled={loadingDropdowns}>
+                    <select 
+                      value={assignmentForm.subject_id} 
+                      onChange={(e) => setAssignmentForm({ ...assignmentForm, subject_id: e.target.value })} 
+                      required 
+                      disabled={loadingDropdowns}
+                    >
                       <option value="">Select Subject</option>
-                      {subjects.map((s) => (<option key={s.id} value={s.id}>{s.title} ({s.subject_code})</option>))}
+                      {subjects.map((s) => (
+                        <option key={s.id} value={s.id}>{s.title} ({s.subject_code})</option>
+                      ))}
                     </select>
                   </div>
+
                   <div className={styles.formGroup}>
                     <label>Class *</label>
-                    <select value={assignmentForm.class_id} onChange={(e) => setAssignmentForm({ ...assignmentForm, class_id: e.target.value })} required disabled={loadingDropdowns}>
+                    <select 
+                      value={assignmentForm.class_id} 
+                      onChange={(e) => setAssignmentForm({ ...assignmentForm, class_id: e.target.value })} 
+                      required 
+                      disabled={loadingDropdowns}
+                    >
                       <option value="">Select Class</option>
-                      {availableClassesList.map((c) => (<option key={c.id} value={c.id}>{c.name} ({c.level})</option>))}
+                      {availableClassesList.map((c) => (
+                        <option key={c.id} value={c.id}>{c.name} ({c.level})</option>
+                      ))}
                     </select>
                   </div>
+
                   <div className={styles.formGroup}>
-                    <label>Academic Year (Optional)</label>
-                    <select value={assignmentForm.academic_year_id} onChange={(e) => setAssignmentForm({ ...assignmentForm, academic_year_id: e.target.value })} disabled={loadingDropdowns}>
+                    <label>Academic Year *</label>
+                    <select 
+                      value={assignmentForm.academic_year_id} 
+                      onChange={(e) => {
+                        setAssignmentForm({ ...assignmentForm, academic_year_id: e.target.value });
+                        // Load terms when academic year changes
+                        if (e.target.value) {
+                          loadTermsForAssignment(parseInt(e.target.value));
+                        } else {
+                          setAvailableTerms([]);
+                        }
+                      }} 
+                      required 
+                      disabled={loadingDropdowns}
+                    >
                       <option value="">Select Academic Year</option>
-                      {availableAcademicYears.map((y) => (<option key={y.id} value={y.id}>{y.year} - {y.name}</option>))}
+                      {availableAcademicYears.map((y) => (
+                        <option key={y.id} value={y.id}>{y.year} - {y.name}</option>
+                      ))}
                     </select>
+                  </div>
+
+                  {/* ADDED: Term field */}
+                  <div className={styles.formGroup}>
+                    <label>Term *</label>
+                    <select 
+                      value={assignmentForm.term_id} 
+                      onChange={(e) => setAssignmentForm({ ...assignmentForm, term_id: e.target.value })} 
+                      required
+                      disabled={!assignmentForm.academic_year_id || loadingDropdowns}
+                    >
+                      <option value="">Full Year (All Terms)</option>
+                      {availableTerms.map((t) => (
+                        <option key={t.id} value={t.id}>{t.name}</option>
+                      ))}
+                    </select>
+                    {!assignmentForm.academic_year_id && (
+                      <small className={styles.helperText}>Please select an academic year first</small>
+                    )}
                   </div>
                 </div>
               </div>
               <div className={styles.modalFooter}>
                 <button type="button" className={styles.cancelButton} onClick={() => setShowAssignmentModal(false)}>Cancel</button>
-                <button type="submit" className={styles.submitButton} disabled={isSubmitting}>{isSubmitting ? "Creating..." : "Create Assignment"}</button>
+                <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
+                  {isSubmitting ? "Creating..." : "Create Assignment"}
+                </button>
               </div>
             </form>
           </div>
