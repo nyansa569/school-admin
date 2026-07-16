@@ -90,7 +90,7 @@
 }
 
 .benefitsCard {
-  background: linear-gradient(135deg, #6A1B2A, #5A1524);
+  background: linear-gradient(to right, #2563eb, #4f46e5);
   border-radius: 24px;
   padding: 2rem;
   color: white;

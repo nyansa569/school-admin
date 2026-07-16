@@ -1,6 +1,4 @@
-// components/launch_components/Footer.tsx
 import styles from './Footer.module.css';
-import Link from 'next/link';
 
 interface FooterProps {
   className?: string;
@@ -14,16 +12,16 @@ const quickLinks = [
 ];
 
 const services = [
-  { label: "Admissions", href: "#enroll" },
+  { label: "Admissions", href: "#" },
+  { label: "Financial Aid", href: "#" },
   { label: "Transportation", href: "#" },
   { label: "Cafeteria", href: "#" },
-  { label: "Sports & Arts", href: "#" },
 ];
 
 const contactInfo = [
-  { label: "Phone", value: "+233 54 179 0780", icon: "📞" },
-  { label: "Email", value: "kiddiewise2012@gmail.com", icon: "✉️" },
-  { label: "Address", value: "Oyarifa Road (Off Container Junction), Accra, Ghana", icon: "📍" },
+  { label: "Phone", value: "(555) 123-4567", icon: "📞" },
+  { label: "Email", value: "info@springfieldacademy.edu", icon: "✉️" },
+  { label: "Address", value: "123 Education Lane, Springfield, ST 12345", icon: "📍" },
 ];
 
 export function Footer({ className }: FooterProps) {
@@ -34,26 +32,20 @@ export function Footer({ className }: FooterProps) {
       <div className={styles.container}>
         <div className={styles.grid}>
           <div className={styles.brandSection}>
-            <div className={styles.logoWrapper}>
-              <img src="/logo.png" alt="Kiddiewise School Complex" className={styles.logoImage} />
-              <h3 className={styles.brandTitle}>Kiddiewise School Complex</h3>
-            </div>
+            <h3 className={styles.brandTitle}>Springfield Academy</h3>
             <p className={styles.brandDescription}>
-              Empowering young minds with quality education and holistic development in a nurturing environment.
+              Empowering students with quality education and holistic development for over 50 years.
             </p>
             <div className={styles.socialLinks}>
-              <a href="#" className={styles.socialLink} aria-label="Facebook">
-                <span className={styles.socialIcon}>📘</span>
-              </a>
-              <a href="#" className={styles.socialLink} aria-label="Instagram">
-                <span className={styles.socialIcon}>📷</span>
-              </a>
-              <a href="#" className={styles.socialLink} aria-label="Twitter">
-                <span className={styles.socialIcon}>🐦</span>
-              </a>
-              <a href="#" className={styles.socialLink} aria-label="LinkedIn">
-                <span className={styles.socialIcon}>💼</span>
-              </a>
+              {["📘", "📷", "📺", "💼"].map((social, index) => (
+                <a
+                  key={index}
+                  href="#"
+                  className={styles.socialLink}
+                >
+                  <span className={styles.socialIcon}>{social}</span>
+                </a>
+              ))}
             </div>
           </div>
 
@@ -109,7 +101,7 @@ export function Footer({ className }: FooterProps) {
         
         <div className={styles.bottomBar}>
           <p className={styles.copyright}>
-            © {currentYear} Kiddiewise School Complex. All rights reserved.
+            © {currentYear} Springfield Academy. All rights reserved. Developed by Nyansa
           </p>
           <div className={styles.legalLinks}>
             <a href="#" className={styles.legalLink}>

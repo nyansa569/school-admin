@@ -1,15 +1,12 @@
-/* components/launch_components/Footer.module.css */
-/* School Colors: White (#FFFFFF) and Wine (#6A1B2A) */
-
 .footer {
-  background-color: #5A1524;
-  color: #FFFFFF;
+  background-color: #111827;
+  color: #ffffff;
 }
 
 .container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 3rem 2rem;
+  padding: 3rem 1rem;
 }
 
 @media (min-width: 640px) {
@@ -20,7 +17,7 @@
 
 @media (min-width: 1024px) {
   .container {
-    padding: 4rem 2rem;
+    padding: 3rem 2rem;
   }
 }
 
@@ -41,30 +38,16 @@
   gap: 1rem;
 }
 
-.logoWrapper {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.logoImage {
-  width: 48px;
-  height: 48px;
-  object-fit: contain;
-}
-
 .brandTitle {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 700;
   margin: 0;
-  color: #FFFFFF;
 }
 
 .brandDescription {
-  color: rgba(255, 255, 255, 0.75);
+  color: #9ca3af;
   font-size: 0.875rem;
   margin: 0;
-  line-height: 1.6;
 }
 
 .socialLinks {
@@ -75,46 +58,27 @@
 .socialLink {
   width: 2.5rem;
   height: 2.5rem;
-  background-color: rgba(255, 255, 255, 0.12);
+  background-color: #1f2937;
   border-radius: 9999px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease;
   text-decoration: none;
 }
 
 .socialLink:hover {
-  background-color: #FFFFFF;
-  transform: translateY(-3px);
-}
-
-.socialLink:hover .socialIcon {
-  color: #6A1B2A;
+  background-color: #2563eb;
 }
 
 .socialIcon {
   font-size: 1.125rem;
-  color: #FFFFFF;
 }
 
 .columnTitle {
   font-size: 1.125rem;
   font-weight: 600;
   margin: 0 0 1rem 0;
-  color: #FFFFFF;
-  position: relative;
-  display: inline-block;
-}
-
-.columnTitle::after {
-  content: '';
-  position: absolute;
-  bottom: -0.5rem;
-  left: 0;
-  width: 40px;
-  height: 2px;
-  background: #FFFFFF;
 }
 
 .linkList {
@@ -124,20 +88,18 @@
 }
 
 .linkList > * + * {
-  margin-top: 0.75rem;
+  margin-top: 0.5rem;
 }
 
 .link {
-  color: rgba(255, 255, 255, 0.7);
+  color: #9ca3af;
   font-size: 0.875rem;
   text-decoration: none;
-  transition: all 0.3s ease;
-  display: inline-block;
+  transition: color 0.3s ease;
 }
 
 .link:hover {
-  color: #FFFFFF;
-  transform: translateX(5px);
+  color: #ffffff;
 }
 
 .contactList {
@@ -147,7 +109,7 @@
 }
 
 .contactList > * + * {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
 }
 
 .contactItem {
@@ -162,22 +124,19 @@
 }
 
 .contactLabel {
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.875rem;
+  color: #9ca3af;
   margin-bottom: 0.125rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .contactValue {
   font-size: 0.875rem;
-  color: #FFFFFF;
-  line-height: 1.4;
+  color: #ffffff;
 }
 
 .divider {
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  margin: 2rem 0 1.5rem;
+  border-top: 1px solid #1f2937;
+  margin: 3rem 0 2rem;
 }
 
 .bottomBar {
@@ -185,7 +144,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
 }
 
 @media (min-width: 768px) {
@@ -195,23 +153,30 @@
 }
 
 .copyright {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.75rem;
+  color: #9ca3af;
+  font-size: 0.875rem;
   margin: 0;
 }
 
 .legalLinks {
   display: flex;
   gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+  .legalLinks {
+    margin-top: 0;
+  }
 }
 
 .legalLink {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 0.75rem;
+  color: #9ca3af;
+  font-size: 0.875rem;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .legalLink:hover {
-  color: #FFFFFF;
+  color: #ffffff;
 }

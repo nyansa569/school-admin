@@ -814,7 +814,7 @@ export function EnrollNow({ className }: EnrollNowProps) {
           {/* Left Side - Benefits */}
           <div className={styles.benefits}>
             <div className={styles.benefitsCard}>
-              <h3 className={styles.benefitsTitle}>Why Choose Kiddiewise?</h3>
+              <h3 className={styles.benefitsTitle}>Why Choose Springfield Academy?</h3>
               <ul className={styles.benefitsList}>
                 <li className={styles.benefitItem}>
                   <div className={styles.benefitIcon}>✅</div>
@@ -872,14 +872,14 @@ export function EnrollNow({ className }: EnrollNowProps) {
                   <span className={styles.contactIcon}>✉️</span>
                   <div>
                     <strong>Email</strong>
-                    <p>kiddiewise2012@gmail.com</p>
+                    <p>SpringfieldAcademy@gmail.com</p>
                   </div>
                 </div>
                 <div className={styles.contactItem}>
                   <span className={styles.contactIcon}>📍</span>
                   <div>
                     <strong>Visit Us</strong>
-                    <p>Oyarifa Road (Off Container Junction), Accra, Ghana</p>
+                    <p>Accra, Ghana</p>
                   </div>
                 </div>
               </div>

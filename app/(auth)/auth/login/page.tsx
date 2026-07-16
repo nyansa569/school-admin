@@ -82,7 +82,7 @@ export default function LoginPage() {
             </svg>
           </div>
           <div className={styles.logoText}>
-            <span className={styles.logoName}>ETF DAYCARE</span>
+            <span className={styles.logoName}>SPRINGFIELD ACADEMY</span>
             <span className={styles.logoTag}>School Management Portal</span>
           </div>
         </div>
@@ -103,7 +103,7 @@ export default function LoginPage() {
               type="email"
               value={email}
               onChange={setEmail}
-              placeholder="admin@etfdaycare.edu.gh"
+              placeholder="admin@springfieldacademy.edu.gh"
               required
               icon={
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
